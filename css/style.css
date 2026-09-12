@@ -1,0 +1,3166 @@
+/* ==========================================================================
+   THE ROYAL RAIL CAFE — Core Design System & Stylesheet
+   Theme: Warm Creamy-White Vintage Railway Station (#FDFBF5 / #FAF6EE)
+   Accents: Maroon (#7C1B26), Mustard (#E8A326), Forest Green (#1E4D36), Brass (#C89C3F)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Share+Tech+Mono&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
+
+:root {
+  /* Creamy White Base Palette */
+  --bg-parchment: #FDFBF5;
+  --bg-parchment-warm: #F8F4EC;
+  --bg-parchment-deep: #EDE5D5;
+  --bg-card: #FFFFFF;
+  --bg-card-warm: #FCF9F2;
+  
+  /* Vintage Indian Railway Heritage Accents */
+  --rail-maroon: #7C1B26;
+  --rail-maroon-dark: #561019;
+  --rail-maroon-light: #9B2735;
+  --rail-mustard: #E69D23;
+  --rail-mustard-dark: #C27D12;
+  --rail-mustard-light: #F7BF4F;
+  --rail-green: #1E4D36;
+  --rail-green-dark: #133825;
+  --rail-green-light: #2C6E4E;
+  
+  /* Metallic & Platform Details */
+  --rail-brass: #C89C3F;
+  --rail-brass-light: #E5C268;
+  --rail-brass-glow: rgba(200, 156, 63, 0.45);
+  --rail-charcoal: #211E1B;
+  --rail-iron: #37332D;
+  --rail-steel: #726E67;
+  --rail-track-gray: #A8A297;
+  
+  /* Shadows & Borders */
+  --border-delicate: rgba(124, 27, 38, 0.14);
+  --border-brass: rgba(200, 156, 63, 0.4);
+  --shadow-soft: 0 10px 30px rgba(33, 30, 27, 0.06);
+  --shadow-medium: 0 14px 40px rgba(33, 30, 27, 0.10);
+  --shadow-coach: 0 20px 50px rgba(33, 30, 27, 0.15), 0 2px 6px rgba(0, 0, 0, 0.05);
+  --shadow-brass-glow: 0 0 25px rgba(200, 156, 63, 0.35);
+  
+  /* Fonts */
+  --font-display: 'Cinzel Decorative', 'Playfair Display', serif;
+  --font-rail-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Share Tech Mono', 'Courier Prime', monospace;
+  
+  /* Dimensions & Curves */
+  --coach-window-radius: 44px 44px 16px 16px;
+  --coach-window-radius-sm: 28px 28px 12px 12px;
+  --border-radius-ticket: 14px;
+  --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Reset & Global Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  background-color: var(--bg-parchment);
+  color: var(--rail-charcoal);
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-parchment);
+  color: var(--rail-charcoal);
+  line-height: 1.65;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+  cursor: default;
+}
+
+/* Custom Train Lantern Cursor */
+#custom-cursor {
+  position: fixed;
+  width: 28px;
+  height: 28px;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.08s ease-out, opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#custom-cursor .lantern-glow {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: radial-gradient(circle, rgba(232, 163, 38, 0.7) 0%, rgba(200, 156, 63, 0.2) 60%, transparent 80%);
+  border-radius: 50%;
+  animation: pulseLantern 2s infinite ease-in-out;
+}
+
+#custom-cursor svg {
+  width: 24px;
+  height: 24px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+@keyframes pulseLantern {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.35); opacity: 1; }
+}
+
+/* Canvas Steam Background Layer */
+#steam-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.75;
+}
+
+/* Punched Ticket Confetti Container */
+#punch-particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 99998;
+  overflow: hidden;
+}
+
+.ticket-flake {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 2px;
+  animation: flakeFall 1.2s forwards cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes flakeFall {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx, 30px), var(--ty, 80px)) rotate(var(--rot, 180deg)) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* Selection */
+::selection {
+  background-color: var(--rail-mustard);
+  color: var(--rail-maroon-dark);
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.container-wide {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Typography Utilities */
+h1, h2, h3, h4 {
+  color: var(--rail-maroon);
+  font-family: var(--font-rail-heading);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--bg-parchment-deep);
+  color: var(--rail-maroon);
+  border: 1px solid var(--border-delicate);
+}
+
+.badge-tag.gold {
+  background: linear-gradient(135deg, #FFF6DD 0%, #FEE5AC 100%);
+  color: #7D4C00;
+  border-color: var(--rail-brass);
+}
+
+.badge-tag.green {
+  background: rgba(30, 77, 54, 0.1);
+  color: var(--rail-green);
+  border-color: rgba(30, 77, 54, 0.25);
+}
+
+/* Section Header Typography */
+.section-header {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 3.5rem;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--rail-mustard-dark);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  font-weight: 700;
+}
+
+.section-eyebrow::before,
+.section-eyebrow::after {
+  content: "◆";
+  font-size: 0.65rem;
+  color: var(--rail-brass);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  line-height: 1.15;
+  color: var(--rail-maroon);
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-size: 1.125rem;
+  color: var(--rail-iron);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   NAVIGATION BAR — Vintage Departure Board Header
+   ========================================================================== */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(253, 251, 245, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 2px solid var(--border-delicate);
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.site-header.scrolled {
+  background: rgba(253, 251, 245, 0.98);
+  box-shadow: 0 8px 24px rgba(33, 30, 27, 0.08);
+  border-bottom-color: var(--rail-brass);
+}
+
+/* Top Departure Board Strip */
+.header-board-strip {
+  background-color: var(--rail-charcoal);
+  color: var(--rail-mustard-light);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  padding: 0.35rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--rail-brass);
+}
+
+.board-ticker {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #2ECC71;
+  display: inline-block;
+  box-shadow: 0 0 8px #2ECC71;
+  animation: signalBlink 2.5s infinite;
+}
+
+@keyframes signalBlink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.85); }
+}
+
+.board-clock {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  color: #FFF;
+}
+
+/* Main Navbar Navigation */
+.header-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 2rem;
+  gap: 1.5rem;
+}
+
+/* Brand Logo */
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  text-decoration: none;
+  color: var(--rail-maroon);
+}
+
+.logo-crest {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, var(--rail-maroon) 0%, var(--rail-maroon-dark) 100%);
+  border: 2px solid var(--rail-brass);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(124, 27, 38, 0.25);
+  color: var(--rail-mustard-light);
+  flex-shrink: 0;
+  transition: transform 0.4s var(--transition-bounce);
+}
+
+.brand-logo:hover .logo-crest {
+  transform: rotate(18deg) scale(1.08);
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-title {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--rail-maroon);
+  letter-spacing: 0.05em;
+}
+
+.logo-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--rail-green);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* Nav Menu Links — Split Flap Hover Effect */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--rail-iron);
+  letter-spacing: 0.02em;
+  padding: 0.5rem 0.2rem;
+  position: relative;
+  display: inline-block;
+  transition: color 0.25s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2.5px;
+  background: linear-gradient(90deg, var(--rail-maroon), var(--rail-mustard));
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 2px;
+}
+
+.nav-link:hover {
+  color: var(--rail-maroon);
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Header Controls & Actions */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* Sound Toggle Horn Button */
+.sound-toggle-btn {
+  background: var(--bg-parchment-warm);
+  border: 1.5px solid var(--border-brass);
+  color: var(--rail-maroon);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-bounce);
+  position: relative;
+}
+
+.sound-toggle-btn:hover {
+  background: var(--rail-mustard);
+  color: #FFF;
+  transform: scale(1.08);
+  box-shadow: 0 4px 15px rgba(230, 157, 35, 0.35);
+}
+
+.sound-waves {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--rail-green);
+  border: 2px solid #FFF;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.sound-toggle-btn.playing .sound-waves {
+  opacity: 1;
+  animation: wavePulse 1.2s infinite;
+}
+
+@keyframes wavePulse {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* Vintage Ticket "Book a Coach" Button */
+.ticket-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, var(--rail-maroon) 0%, var(--rail-maroon-dark) 100%);
+  color: var(--rail-cream);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.65rem 1.4rem;
+  border-radius: 6px;
+  border: 1.5px dashed var(--rail-brass);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(124, 27, 38, 0.28);
+  transition: var(--transition-bounce);
+  text-transform: uppercase;
+}
+
+.ticket-cta-btn::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: var(--bg-parchment);
+  border-radius: 50%;
+  border-right: 1.5px dashed var(--rail-brass);
+}
+
+.ticket-cta-btn::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: var(--bg-parchment);
+  border-radius: 50%;
+  border-left: 1.5px dashed var(--rail-brass);
+}
+
+.ticket-cta-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: linear-gradient(135deg, var(--rail-maroon-light) 0%, var(--rail-maroon) 100%);
+  box-shadow: 0 8px 25px rgba(124, 27, 38, 0.35);
+  color: #FFF;
+}
+
+/* Mobile Nav Toggle Button */
+.mobile-nav-toggle {
+  display: none;
+  width: 42px;
+  height: 42px;
+  background: rgba(124, 27, 38, 0.08);
+  border: 1.5px solid var(--border-delicate);
+  border-radius: 8px;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0;
+  transition: var(--transition-bounce);
+  z-index: 1001;
+  flex-shrink: 0;
+}
+
+.mobile-nav-toggle:hover,
+.mobile-nav-toggle.active {
+  background: var(--rail-maroon);
+  border-color: var(--rail-brass);
+}
+
+.hamburger-bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background-color: var(--rail-maroon);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.mobile-nav-toggle.active .hamburger-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+  background-color: #FFF;
+}
+
+.mobile-nav-toggle.active .hamburger-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-nav-toggle.active .hamburger-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+  background-color: #FFF;
+}
+
+/* Mobile Navigation Drawer */
+.mobile-nav-drawer {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: min(88vw, 360px);
+  height: 100vh;
+  height: 100dvh;
+  background: #FDFBF5;
+  background-image: radial-gradient(#E8DFC9 1.2px, transparent 1.2px);
+  background-size: 16px 16px;
+  border-left: 3px solid var(--rail-brass);
+  box-shadow: -15px 0 45px rgba(33, 30, 27, 0.3);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem 1.25rem;
+  transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+}
+
+.mobile-nav-drawer.open {
+  right: 0;
+}
+
+.mobile-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1.2rem;
+  border-bottom: 2px solid var(--border-delicate);
+}
+
+.mobile-drawer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.05rem;
+  color: var(--rail-maroon);
+  letter-spacing: 0.04em;
+}
+
+.logo-crest.mini {
+  width: 32px;
+  height: 32px;
+}
+
+.logo-crest.mini svg {
+  width: 18px;
+  height: 18px;
+}
+
+.mobile-drawer-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-delicate);
+  background: #FFF;
+  color: var(--rail-maroon);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-bounce);
+}
+
+.mobile-drawer-close:hover {
+  background: var(--rail-maroon);
+  color: #FFF;
+  transform: rotate(90deg);
+}
+
+.mobile-drawer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.9rem 1rem;
+  background: #FFF;
+  border: 1px solid var(--border-delicate);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+  box-shadow: var(--shadow-soft);
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link:active {
+  border-color: var(--rail-brass);
+  background: #FFF8EB;
+  transform: translateX(4px);
+}
+
+.nav-link-num {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--rail-mustard-dark);
+  font-weight: 700;
+  width: 28px;
+}
+
+.nav-link-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--rail-maroon);
+  letter-spacing: 0.05em;
+  flex: 1;
+}
+
+.nav-link-arrow {
+  color: var(--rail-brass);
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+}
+
+.mobile-nav-link:hover .nav-link-arrow {
+  transform: translateX(3px);
+  color: var(--rail-maroon);
+}
+
+.mobile-drawer-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border-delicate);
+}
+
+.mobile-drawer-book-btn {
+  width: 100%;
+  justify-content: center;
+  font-size: 0.95rem;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.mobile-drawer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--rail-steel);
+  text-align: center;
+}
+
+/* Mobile Nav Backdrop */
+.mobile-nav-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(20, 18, 16, 0.65);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.mobile-nav-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ==========================================================================
+   HERO SECTION — Animated 2D Train, Speed Gauge & Track
+   ========================================================================== */
+.hero-section {
+  position: relative;
+  min-height: 100vh;
+  padding-top: 7.5rem;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, #FFFDF9 0%, var(--bg-parchment) 70%, #F5EEDB 100%);
+}
+
+/* Parallax Scenery Background Layers in Hero */
+.hero-scenery-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scenery-layer {
+  position: absolute;
+  width: 200%;
+  bottom: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.scenery-sky {
+  top: 0;
+  height: 60%;
+  background: radial-gradient(ellipse at 50% 20%, rgba(247, 191, 79, 0.15) 0%, transparent 60%);
+}
+
+.scenery-hills {
+  bottom: 180px;
+  height: 220px;
+  opacity: 0.28;
+  background-repeat: repeat-x;
+  background-position: bottom;
+}
+
+.scenery-poles {
+  bottom: 120px;
+  height: 160px;
+  opacity: 0.45;
+  background-repeat: repeat-x;
+  background-position: bottom;
+}
+
+/* Hero Content Area */
+.hero-content {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  max-width: 960px;
+  margin: 1.5rem auto 1rem;
+  padding: 0 1.5rem;
+}
+
+.hero-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #FFF;
+  padding: 0.45rem 1.25rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--rail-brass);
+  box-shadow: 0 4px 15px rgba(200, 156, 63, 0.2);
+  margin-bottom: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--rail-maroon);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6.5vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  color: var(--rail-maroon);
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 8px rgba(124, 27, 38, 0.08);
+}
+
+.hero-title .highlight {
+  color: var(--rail-mustard-dark);
+  font-style: italic;
+  font-family: var(--font-rail-heading);
+}
+
+.hero-tagline {
+  font-size: clamp(1.1rem, 2vw, 1.45rem);
+  color: var(--rail-iron);
+  font-weight: 500;
+  max-width: 720px;
+  margin: 0 auto 1.8rem;
+  line-height: 1.5;
+}
+
+.hero-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.btn-primary-rail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: var(--rail-maroon);
+  color: #FFF;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.85rem 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 8px 25px rgba(124, 27, 38, 0.25);
+  border: 2px solid var(--rail-maroon-light);
+  transition: var(--transition-bounce);
+}
+
+.btn-primary-rail:hover {
+  background: var(--rail-maroon-dark);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(124, 27, 38, 0.35);
+  color: #FFF;
+}
+
+.btn-secondary-rail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: #FFF;
+  color: var(--rail-maroon);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.85rem 1.8rem;
+  border-radius: 8px;
+  text-decoration: none;
+  border: 2px solid var(--border-delicate);
+  box-shadow: var(--shadow-soft);
+  transition: var(--transition-smooth);
+}
+
+.btn-secondary-rail:hover {
+  border-color: var(--rail-mustard);
+  color: var(--rail-mustard-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Mouse Speed Control HUD */
+.train-hud-panel {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--border-brass);
+  box-shadow: 0 6px 20px rgba(33, 30, 27, 0.08);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--rail-charcoal);
+  margin-top: 0.5rem;
+}
+
+.hud-speedometer {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--rail-maroon);
+  font-weight: 700;
+}
+
+.speed-needle-icon {
+  font-size: 1rem;
+}
+
+.hud-tip {
+  color: var(--rail-steel);
+  font-size: 0.78rem;
+}
+
+/* Train Whistle Mini Button */
+.btn-train-whistle {
+  background: var(--rail-mustard);
+  border: none;
+  color: var(--rail-charcoal);
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: var(--transition-bounce);
+}
+
+.btn-train-whistle:hover {
+  background: var(--rail-mustard-dark);
+  color: #FFF;
+  transform: scale(1.05);
+}
+
+/* Track & Animated Train Area */
+.hero-railway-stage {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  margin-top: auto;
+  z-index: 10;
+  overflow: hidden;
+}
+
+/* Railway Track Line */
+.railway-track-assembly {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  width: 100%;
+  height: 38px;
+  z-index: 15;
+}
+
+.track-ballast {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 18px;
+  background: linear-gradient(180deg, #D4CEBF 0%, #B8B09F 100%);
+  border-top: 1px solid #9E9684;
+}
+
+.track-sleepers {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  width: 200%;
+  height: 12px;
+  background: repeating-linear-gradient(
+    90deg,
+    #543A23 0px,
+    #543A23 16px,
+    transparent 16px,
+    transparent 36px
+  );
+  will-change: transform;
+}
+
+.track-rails {
+  position: absolute;
+  bottom: 22px;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #A0A0A0 40%, #505050 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.track-rails-bottom {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(180deg, #C0C0C0 0%, #707070 100%);
+}
+
+/* Train Viewport & Chugging Container */
+.train-consist-wrapper {
+  position: absolute;
+  bottom: 31px;
+  left: 0;
+  width: 100%;
+  height: 190px;
+  z-index: 20;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+.train-consist {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Suspension Bobbing */
+.train-bob-assembly {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  animation: trainBob 0.65s infinite ease-in-out alternate;
+}
+
+@keyframes trainBob {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-3.5px); }
+}
+
+/* Hero Scroll Signal Indicator */
+.hero-scroll-indicator {
+  position: relative;
+  text-align: center;
+  z-index: 25;
+  margin-top: 0.5rem;
+}
+
+.signal-post-indicator {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: var(--rail-iron);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: transform 0.3s ease;
+}
+
+.signal-lamp-icon {
+  width: 24px;
+  height: 24px;
+  background: #FFF;
+  border: 2px solid var(--rail-maroon);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
+}
+
+.signal-lamp-green {
+  width: 10px;
+  height: 10px;
+  background-color: #2ECC71;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #2ECC71;
+  animation: signalLampPulse 1.5s infinite;
+}
+
+@keyframes signalLampPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
+}
+
+/* ==========================================================================
+   SECTION TRANSITION — Railway Coupling Mechanism
+   ========================================================================== */
+.coupling-divider {
+  position: relative;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg-parchment);
+}
+
+.coupling-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--border-delicate) 0px,
+    var(--border-delicate) 12px,
+    transparent 12px,
+    transparent 20px
+  );
+}
+
+.coupling-knuckle {
+  position: relative;
+  z-index: 2;
+  background: var(--bg-card-warm);
+  border: 2px solid var(--rail-brass);
+  border-radius: 999px;
+  padding: 0.35rem 1.4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--rail-maroon);
+  box-shadow: var(--shadow-soft);
+}
+
+.coupling-knuckle svg {
+  color: var(--rail-mustard);
+}
+
+/* ==========================================================================
+   ABOUT SECTION — Step Aboard The Two Real Coaches
+   ========================================================================== */
+.about-section {
+  padding: 6rem 0;
+  position: relative;
+  background: linear-gradient(180deg, var(--bg-parchment) 0%, var(--bg-parchment-warm) 100%);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.about-story {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.story-lead {
+  font-size: 1.35rem;
+  font-family: var(--font-rail-heading);
+  color: var(--rail-maroon-dark);
+  line-height: 1.55;
+}
+
+.story-text {
+  font-size: 1.05rem;
+  color: var(--rail-iron);
+  line-height: 1.75;
+}
+
+/* Coach Comparison Cards (Coach A & Coach B) */
+.coaches-detail-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.coach-detail-card {
+  background: #FFF;
+  border-radius: 12px;
+  padding: 1.4rem;
+  border: 1.5px solid var(--border-delicate);
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+}
+
+.coach-detail-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+}
+
+.coach-detail-card.coach-a::before {
+  background: var(--rail-maroon);
+}
+
+.coach-detail-card.coach-b::before {
+  background: var(--rail-green);
+}
+
+.coach-detail-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-medium);
+  border-color: var(--rail-brass);
+}
+
+.coach-tag-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.coach-code {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--rail-mustard-dark);
+}
+
+.coach-seats {
+  font-size: 0.75rem;
+  color: var(--rail-steel);
+  font-weight: 600;
+}
+
+.coach-name {
+  font-size: 1.2rem;
+  font-family: var(--font-rail-heading);
+  color: var(--rail-charcoal);
+  margin-bottom: 0.4rem;
+}
+
+.coach-desc {
+  font-size: 0.88rem;
+  color: var(--rail-iron);
+  line-height: 1.5;
+}
+
+/* About Visual Media Stack */
+.about-media-stack {
+  position: relative;
+}
+
+.about-main-img-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-coach);
+  border: 4px solid #FFF;
+}
+
+.about-main-img-card img {
+  width: 100%;
+  height: 440px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-main-img-card:hover img {
+  transform: scale(1.04);
+}
+
+.about-floating-stat {
+  position: absolute;
+  bottom: -25px;
+  left: -25px;
+  background: #FFF;
+  border-radius: 14px;
+  padding: 1.2rem 1.6rem;
+  box-shadow: 0 16px 35px rgba(33, 30, 27, 0.16);
+  border: 2px solid var(--rail-brass);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 5;
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--rail-maroon);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.82rem;
+  color: var(--rail-iron);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   MENU SECTION — Styled as Coach Windows with 3D Tilt
+   ========================================================================== */
+.menu-section {
+  padding: 7rem 0;
+  background: radial-gradient(circle at 50% 10%, #FFFFFF 0%, var(--bg-parchment) 70%, #F5EEDB 100%);
+  position: relative;
+}
+
+/* Menu Category Switcher */
+.menu-categories-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 3.5rem;
+}
+
+.category-tab {
+  background: #FFF;
+  border: 1.5px solid var(--border-delicate);
+  color: var(--rail-iron);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 0.65rem 1.35rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.category-tab:hover {
+  border-color: var(--rail-brass);
+  color: var(--rail-maroon);
+  transform: translateY(-2px);
+}
+
+.category-tab.active {
+  background: var(--rail-maroon);
+  color: #FFF;
+  border-color: var(--rail-maroon-dark);
+  box-shadow: 0 6px 20px rgba(124, 27, 38, 0.28);
+}
+
+/* Coach Windows Menu Grid */
+.coach-windows-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2.5rem;
+  perspective: 1200px;
+}
+
+/* Individual Coach Window Card */
+.coach-window-item {
+  position: relative;
+  background: #FFF;
+  border-radius: var(--coach-window-radius);
+  border: 4px solid #DFD9CE;
+  outline: 2px solid var(--border-brass);
+  box-shadow: var(--shadow-coach);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.coach-window-item:hover {
+  box-shadow: 0 25px 50px rgba(33, 30, 27, 0.18), var(--shadow-brass-glow);
+  outline-color: var(--rail-mustard);
+}
+
+/* Carriage Window Rivets & Frame */
+.window-frame-trim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: inherit;
+}
+
+.window-rivets-top {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 1rem;
+  z-index: 12;
+  pointer-events: none;
+}
+
+.rivet-dot {
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, #E2D9C8 30%, #8C8474 100%);
+  border-radius: 50%;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Window Aperture / Glass Viewport */
+.window-glass-viewport {
+  position: relative;
+  width: 100%;
+  height: 270px;
+  overflow: hidden;
+  background-color: var(--rail-charcoal);
+  border-radius: 40px 40px 0 0;
+}
+
+.window-dish-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+}
+
+.coach-window-item:hover .window-dish-img {
+  transform: scale(1.08);
+}
+
+/* Interactive Velvet Window Curtain */
+.window-curtain-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  pointer-events: none;
+  z-index: 5;
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.curtain-panel {
+  flex: 1;
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    #7A1420 0px,
+    #8F1B29 12px,
+    #5E0E17 24px
+  );
+  box-shadow: inset 0 -10px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.curtain-panel.left {
+  transform-origin: left;
+  border-right: 2px solid var(--rail-brass);
+  transform: translateX(0);
+  transition: transform 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.curtain-panel.right {
+  transform-origin: right;
+  border-left: 2px solid var(--rail-brass);
+  transform: translateX(0);
+  transition: transform 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* Brass Tieback Tassel Rings framing the window when opened */
+.curtain-panel.left::after {
+  content: '';
+  position: absolute;
+  top: 48%;
+  right: 2px;
+  width: 10px;
+  height: 24px;
+  border: 2px solid var(--rail-gold);
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.curtain-panel.right::after {
+  content: '';
+  position: absolute;
+  top: 48%;
+  left: 2px;
+  width: 10px;
+  height: 24px;
+  border: 2px solid var(--rail-gold);
+  border-right: none;
+  border-radius: 10px 0 0 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* SHUTTER ANIMATION: Opens smoothly on hover (PC) or tap toggle (.curtains-open on mobile) */
+.coach-window-item:hover .curtain-panel.left,
+.coach-window-item.curtains-open .curtain-panel.left {
+  transform: translateX(-92%);
+}
+
+.coach-window-item:hover .curtain-panel.right,
+.coach-window-item.curtains-open .curtain-panel.right {
+  transform: translateX(92%);
+}
+
+.coach-window-item:hover .window-glass-sheen,
+.coach-window-item.curtains-open .window-glass-sheen {
+  left: 150%;
+}
+
+.coach-window-item:hover .window-dish-img,
+.coach-window-item.curtains-open .window-dish-img {
+  transform: scale(1.06);
+}
+
+/* Glass Reflection Sheen */
+.window-glass-sheen {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 8;
+  transition: left 0.75s ease;
+}
+
+.coach-window-item:hover .window-glass-sheen {
+  left: 150%;
+}
+
+/* Coach Window Bottom Details / Food Specs */
+.window-content-panel {
+  padding: 1.5rem 1.6rem 1.6rem;
+  background: #FFF;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-delicate);
+}
+
+.window-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.65rem;
+}
+
+.dish-dietary-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dietary-square {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  border: 1.5px solid;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dietary-square.veg {
+  border-color: #27AE60;
+  color: #27AE60;
+}
+
+.dietary-square.veg::before {
+  content: '●';
+  font-size: 10px;
+}
+
+.dietary-square.non-veg {
+  border-color: #C0392B;
+  color: #C0392B;
+}
+
+.dietary-square.non-veg::before {
+  content: '▲';
+  font-size: 8px;
+}
+
+.window-dish-price {
+  font-family: var(--font-mono);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--rail-maroon);
+}
+
+.window-dish-title {
+  font-family: var(--font-rail-heading);
+  font-size: 1.4rem;
+  color: var(--rail-charcoal);
+  margin-bottom: 0.5rem;
+  line-height: 1.25;
+}
+
+.window-dish-desc {
+  font-size: 0.92rem;
+  color: var(--rail-iron);
+  line-height: 1.55;
+  margin-bottom: 1.25rem;
+}
+
+.window-dish-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.9rem;
+  border-top: 1px dashed var(--border-delicate);
+  margin-top: auto;
+}
+
+.berth-serving-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--rail-steel);
+}
+
+.btn-order-dish {
+  background: var(--bg-parchment-warm);
+  border: 1.5px solid var(--border-brass);
+  color: var(--rail-maroon);
+  padding: 0.45rem 0.95rem;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-bounce);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+}
+
+.btn-order-dish:hover {
+  background: var(--rail-mustard);
+  color: #FFF;
+  border-color: var(--rail-mustard-dark);
+  transform: scale(1.05);
+}
+
+/* WhatsApp Order Button for Food Items */
+.btn-order-whatsapp {
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  border: 1.5px solid rgba(200, 156, 63, 0.6);
+  color: #FFFFFF !important;
+  box-shadow: 0 3px 10px rgba(37, 211, 102, 0.3);
+  font-size: 0.8rem;
+  padding: 0.5rem 0.95rem;
+  min-height: 40px;
+}
+
+.btn-order-whatsapp:hover {
+  background: linear-gradient(135deg, #1EBE5D 0%, #075E54 100%);
+  border-color: var(--rail-gold);
+  color: #FFFFFF !important;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.45);
+}
+
+.btn-order-whatsapp svg {
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+/* Floating WhatsApp Quick Order Button */
+.floating-whatsapp-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: #FFFFFF;
+  padding: 0.75rem 1.3rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.03em;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45), 0 2px 8px rgba(0, 0, 0, 0.25);
+  border: 2px solid rgba(200, 156, 63, 0.8);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: waPulse 2.8s infinite;
+}
+
+.floating-whatsapp-btn:hover {
+  transform: scale(1.06) translateY(-3px);
+  box-shadow: 0 12px 28px rgba(37, 211, 102, 0.6), 0 4px 12px rgba(0, 0, 0, 0.3);
+  color: #FFFFFF;
+}
+
+.floating-whatsapp-btn svg {
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+@keyframes waPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7), 0 8px 24px rgba(37, 211, 102, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(37, 211, 102, 0), 0 8px 24px rgba(37, 211, 102, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0), 0 8px 24px rgba(37, 211, 102, 0.4);
+  }
+}
+
+@media (max-width: 600px) {
+  .floating-whatsapp-btn {
+    bottom: 18px;
+    right: 18px;
+    padding: 0.65rem 1rem;
+    font-size: 0.82rem;
+  }
+  .floating-whatsapp-btn span.wa-label-long {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   LOCATION SECTION — Station Depot & Google Maps Navigation
+   ========================================================================== */
+.location-section {
+  padding: 6rem 0;
+  background: var(--bg-parchment-warm);
+  position: relative;
+  border-top: 1px solid var(--border-delicate);
+}
+
+.location-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 2.5rem;
+  align-items: stretch;
+}
+
+.location-info-card {
+  background: #FFFFFF;
+  border: 2px solid var(--border-brass);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  box-shadow: var(--shadow-station);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.location-info-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--rail-maroon), var(--rail-gold), var(--rail-maroon));
+}
+
+.location-station-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(124, 27, 38, 0.08);
+  color: var(--rail-maroon);
+  padding: 0.35rem 0.8rem;
+  border-radius: 50px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.location-card-title {
+  font-family: var(--font-rail-heading);
+  font-size: 2rem;
+  color: var(--rail-charcoal);
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.location-card-desc {
+  font-size: 0.95rem;
+  color: var(--rail-iron);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.location-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  margin-bottom: 2rem;
+}
+
+.location-detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.location-detail-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: var(--bg-cream);
+  border: 1px solid var(--border-delicate);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.location-detail-text strong {
+  display: block;
+  font-family: var(--font-rail-heading);
+  font-size: 0.95rem;
+  color: var(--rail-charcoal);
+  margin-bottom: 0.15rem;
+}
+
+.location-detail-text span {
+  font-size: 0.88rem;
+  color: var(--rail-iron);
+  line-height: 1.4;
+}
+
+.location-actions-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: auto;
+}
+
+.btn-directions-maps {
+  background: var(--rail-maroon);
+  color: #FFFFFF !important;
+  border: 2px solid var(--rail-brass);
+  padding: 0.85rem 1.4rem;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  box-shadow: var(--shadow-station);
+  transition: var(--transition-bounce);
+  cursor: pointer;
+  flex: 1;
+  justify-content: center;
+}
+
+.btn-directions-maps:hover {
+  background: var(--rail-crimson);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(124, 27, 38, 0.4);
+}
+
+.btn-whatsapp-hotline {
+  background: #25D366;
+  color: #FFFFFF !important;
+  border: 2px solid #1EBE5D;
+  padding: 0.85rem 1.4rem;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  transition: var(--transition-bounce);
+  cursor: pointer;
+  flex: 1;
+  justify-content: center;
+}
+
+.btn-whatsapp-hotline:hover {
+  background: #1EBE5D;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.5);
+}
+
+.location-map-container {
+  background: #FFFFFF;
+  border: 2.5px solid var(--border-brass);
+  border-radius: 16px;
+  padding: 0.75rem;
+  box-shadow: var(--shadow-station);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 460px;
+}
+
+.map-brass-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 1rem 0.75rem;
+  border-bottom: 1px solid var(--border-delicate);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--rail-maroon);
+  font-weight: 700;
+}
+
+.map-frame-viewport {
+  flex: 1;
+  width: 100%;
+  min-height: 380px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-delicate);
+  background: #E5E3DF;
+}
+
+.map-frame-viewport iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  border: 0;
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .location-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .location-info-card {
+    padding: 1.75rem 1.25rem;
+  }
+  .location-card-title {
+    font-size: 1.6rem;
+  }
+  .location-map-container {
+    min-height: 380px;
+  }
+  .map-frame-viewport,
+  .map-frame-viewport iframe {
+    min-height: 320px;
+  }
+}
+
+/* ==========================================================================
+   GALLERY SECTION — Instagram Carriage Grid & Lightbox
+   ========================================================================== */
+.gallery-section {
+  padding: 6.5rem 0;
+  background: var(--bg-parchment-warm);
+  position: relative;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+}
+
+.gallery-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  border: 3px solid #FFF;
+  cursor: pointer;
+  background-color: var(--rail-charcoal);
+  transition: var(--transition-bounce);
+}
+
+.gallery-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
+}
+
+.gallery-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-coach);
+  border-color: var(--rail-brass);
+}
+
+.gallery-card:hover img {
+  transform: scale(1.08);
+}
+
+/* Gallery Grid Layout Variations */
+.gallery-card.col-6 { grid-column: span 6; height: 360px; }
+.gallery-card.col-4 { grid-column: span 4; height: 320px; }
+.gallery-card.col-8 { grid-column: span 8; height: 320px; }
+.gallery-card.col-12 { grid-column: span 12; height: 420px; }
+
+/* Carriage Window Frame Overlay on Gallery */
+.gallery-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, rgba(33, 30, 27, 0.85) 0%, rgba(33, 30, 27, 0.1) 60%, transparent 100%);
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  color: #FFF;
+  transition: opacity 0.35s ease;
+}
+
+.gallery-card:hover .gallery-overlay {
+  opacity: 1;
+}
+
+.gallery-caption-title {
+  font-family: var(--font-rail-heading);
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.gallery-caption-sub {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--rail-mustard-light);
+  letter-spacing: 0.08em;
+}
+
+/* ==========================================================================
+   RESERVATIONS SECTION — Vintage Train Ticket Booking Slip
+   ========================================================================== */
+.reservation-section {
+  padding: 7rem 0;
+  background: radial-gradient(circle at 50% 30%, #FFFDF9 0%, var(--bg-parchment) 70%, #F5EEDB 100%);
+  position: relative;
+}
+
+.reservation-wrapper {
+  max-width: 1080px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Vintage IRCTC / Great Indian Peninsula Ticket Envelope */
+.ticket-envelope-sleeve {
+  background: #ECE5D4;
+  border: 2px solid var(--border-brass);
+  border-radius: 20px;
+  padding: 1rem;
+  box-shadow: var(--shadow-coach);
+  position: relative;
+}
+
+.ticket-container {
+  background: #FFFDF9;
+  border-radius: 16px;
+  border: 2px solid #D6CEBE;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Notched Edge Perforations */
+.ticket-container::before,
+.ticket-container::after {
+  content: '';
+  position: absolute;
+  top: 105px;
+  width: 24px;
+  height: 24px;
+  background-color: #ECE5D4;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.ticket-container::before {
+  left: -12px;
+  box-shadow: inset -2px 0 3px rgba(0,0,0,0.15);
+}
+
+.ticket-container::after {
+  right: -12px;
+  box-shadow: inset 2px 0 3px rgba(0,0,0,0.15);
+}
+
+/* Ticket Header Strip */
+.ticket-header-strip {
+  background: linear-gradient(135deg, var(--rail-maroon) 0%, var(--rail-maroon-dark) 100%);
+  color: #FFF;
+  padding: 1.25rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid var(--rail-brass);
+}
+
+.ticket-train-no {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: var(--rail-mustard-light);
+}
+
+.ticket-header-title {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+.ticket-class-badge {
+  background: var(--rail-mustard);
+  color: var(--rail-charcoal);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.35rem 0.8rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* Journey Route Indicator */
+.ticket-route-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 2.5rem;
+  background: #FAF6EE;
+  border-bottom: 2px dashed #D6CEBE;
+}
+
+.route-station {
+  display: flex;
+  flex-direction: column;
+}
+
+.route-code {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--rail-maroon);
+}
+
+.route-city {
+  font-size: 0.85rem;
+  color: var(--rail-iron);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.route-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  flex: 1;
+  max-width: 280px;
+}
+
+.route-line {
+  width: 100%;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--rail-brass) 0px,
+    var(--rail-brass) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+.route-train-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--rail-green);
+  font-weight: 700;
+}
+
+/* Ticket Form Body */
+.ticket-form-body {
+  padding: 2.2rem 2.5rem;
+}
+
+.ticket-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.6rem;
+}
+
+.ticket-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.ticket-label {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--rail-charcoal);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ticket-input,
+.ticket-select {
+  background: #FFF;
+  border: 1.5px solid #D6CEBE;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--rail-charcoal);
+  transition: var(--transition-smooth);
+}
+
+.ticket-input:focus,
+.ticket-select:focus {
+  outline: none;
+  border-color: var(--rail-maroon);
+  box-shadow: 0 0 0 3px rgba(124, 27, 38, 0.12);
+}
+
+/* Coach Radios */
+.coach-selector-grid {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.coach-radio-card {
+  position: relative;
+  cursor: pointer;
+}
+
+.coach-radio-card input {
+  position: absolute;
+  opacity: 0;
+}
+
+.coach-radio-box {
+  background: #FFF;
+  border: 2px solid #D6CEBE;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: var(--transition-smooth);
+}
+
+.coach-radio-card input:checked + .coach-radio-box {
+  border-color: var(--rail-maroon);
+  background: #FAF3F4;
+  box-shadow: 0 4px 15px rgba(124, 27, 38, 0.12);
+}
+
+.coach-radio-bullet {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #A8A297;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--transition-bounce);
+}
+
+.coach-radio-card input:checked + .coach-radio-box .coach-radio-bullet {
+  border-color: var(--rail-maroon);
+  background: var(--rail-maroon);
+}
+
+.coach-radio-bullet::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #FFF;
+  opacity: 0;
+}
+
+.coach-radio-card input:checked + .coach-radio-box .coach-radio-bullet::after {
+  opacity: 1;
+}
+
+/* Ticket Footer Actions & Stamp Area */
+.ticket-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px dashed #D6CEBE;
+  position: relative;
+}
+
+.ticket-fare-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.fare-title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--rail-steel);
+  text-transform: uppercase;
+}
+
+.fare-amount {
+  font-family: var(--font-mono);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--rail-green);
+}
+
+.btn-book-ticket {
+  background: linear-gradient(135deg, var(--rail-maroon) 0%, var(--rail-maroon-dark) 100%);
+  color: #FFF;
+  border: 2px solid var(--rail-brass);
+  border-radius: 8px;
+  padding: 0.95rem 2.5rem;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(124, 27, 38, 0.3);
+  transition: var(--transition-bounce);
+}
+
+.btn-book-ticket:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(124, 27, 38, 0.4);
+  background: linear-gradient(135deg, var(--rail-maroon-light) 0%, var(--rail-maroon) 100%);
+}
+
+/* Red-Ink Stamped "CONFIRMED" Seal */
+.ticket-stamp-seal {
+  position: absolute;
+  top: 40%;
+  right: 15%;
+  transform: translate(0, 0) rotate(-15deg) scale(0);
+  border: 5px double #C0392B;
+  color: #C0392B;
+  padding: 0.6rem 1.6rem;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 50;
+  box-shadow: 0 0 15px rgba(192, 57, 43, 0.4);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(2px);
+}
+
+.ticket-stamp-seal.stamped {
+  animation: stampImpact 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes stampImpact {
+  0% {
+    transform: rotate(-15deg) scale(3.5);
+    opacity: 0;
+  }
+  65% {
+    transform: rotate(-15deg) scale(0.9);
+    opacity: 0.95;
+  }
+  100% {
+    transform: rotate(-15deg) scale(1);
+    opacity: 0.92;
+  }
+}
+
+/* ==========================================================================
+   LOCATION & HOURS — Station Departure Board
+   ========================================================================== */
+.station-board-section {
+  padding: 7rem 0;
+  background: var(--bg-parchment-warm);
+  position: relative;
+}
+
+.station-board-container {
+  background-color: var(--rail-charcoal);
+  border: 6px solid #48433C;
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  box-shadow: var(--shadow-coach);
+  color: #FFF;
+  position: relative;
+}
+
+.board-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--rail-brass);
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.board-junction-title {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  letter-spacing: 0.15em;
+  color: var(--rail-mustard-light);
+}
+
+.board-status-live {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: #2ECC71;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Split-Flap Timetable Rows */
+.board-timetable-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+}
+
+.board-timetable-table th {
+  text-align: left;
+  color: var(--rail-brass);
+  font-size: 0.85rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(200, 156, 63, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.board-timetable-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+}
+
+.flap-cell {
+  background: #181614;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  border: 1px solid #332F2A;
+  color: #F8F4EC;
+  display: inline-block;
+  min-width: 80px;
+  text-align: center;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.status-cell-ontime {
+  color: #2ECC71;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   FOOTER — Platform 1 Signboard & Heritage Seal
+   ========================================================================== */
+.site-footer {
+  background: linear-gradient(180deg, var(--bg-parchment-deep) 0%, #DFD6C2 100%);
+  border-top: 3px solid var(--rail-brass);
+  padding: 5rem 0 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Indian Railways Platform Signboard */
+.platform-signboard-wrapper {
+  max-width: 600px;
+  margin: 0 auto 3.5rem;
+  text-align: center;
+}
+
+.platform-enamel-sign {
+  background: #FFF;
+  border: 8px solid var(--rail-maroon);
+  border-radius: 12px;
+  padding: 1.5rem 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  position: relative;
+}
+
+.platform-enamel-sign::before,
+.platform-enamel-sign::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: #6E685F;
+  border-radius: 50%;
+  top: 10px;
+}
+
+.platform-enamel-sign::before { left: 14px; }
+.platform-enamel-sign::after { right: 14px; }
+
+.sign-hindi {
+  font-family: var(--font-rail-heading);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--rail-maroon-dark);
+  line-height: 1.2;
+}
+
+.sign-english {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: var(--rail-maroon);
+  letter-spacing: 0.12em;
+  margin-top: 0.2rem;
+}
+
+.sign-elevation {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--rail-steel);
+  letter-spacing: 0.18em;
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--border-delicate);
+  padding-top: 0.4rem;
+}
+
+/* Footer Bottom Links & Info */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3.5rem;
+}
+
+.footer-col-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footer-desc {
+  font-size: 0.95rem;
+  color: var(--rail-iron);
+  line-height: 1.6;
+}
+
+.footer-col-title {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--rail-maroon);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+}
+
+.footer-nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.footer-nav-link {
+  text-decoration: none;
+  color: var(--rail-iron);
+  font-size: 0.92rem;
+  transition: color 0.2s;
+}
+
+.footer-nav-link:hover {
+  color: var(--rail-maroon);
+  text-decoration: underline;
+}
+
+.footer-copyright {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(124, 27, 38, 0.15);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  color: var(--rail-steel);
+}
+
+/* ==========================================================================
+   COMPREHENSIVE MOBILE RESPONSIVE SYSTEM (All Smartphones, Tablets & Foldables)
+   ========================================================================== */
+
+/* Prevent horizontal page blow-out and zoom issues */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+body.menu-locked {
+  overflow: hidden;
+}
+
+/* Touch & Mobile Cursor Disabling */
+@media (hover: none), (pointer: coarse), (max-width: 900px) {
+  #custom-cursor {
+    display: none !important;
+  }
+  body, a, button, input, select {
+    cursor: auto !important;
+  }
+}
+
+/* 1. Large Tablets & Small Laptops (<= 1024px) */
+@media (max-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 2.5rem;
+  }
+  .gallery-card.col-8,
+  .gallery-card.col-6,
+  .gallery-card.col-4 {
+    grid-column: span 6;
+  }
+  .desktop-nav .nav-links {
+    gap: 1.25rem;
+  }
+}
+
+/* 2. Tablets & Landscape Phones (<= 768px) */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none !important;
+  }
+  .mobile-nav-toggle {
+    display: flex;
+  }
+  .container,
+  .container-wide {
+    padding: 0 1.25rem;
+  }
+  .hero-section {
+    padding-top: 6.8rem;
+    min-height: auto;
+    padding-bottom: 2rem;
+  }
+  .hero-title {
+    font-size: clamp(2.3rem, 7.5vw, 3.8rem);
+  }
+  .hero-tagline {
+    font-size: 1.05rem;
+    padding: 0 0.5rem;
+  }
+  .coach-windows-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: 2rem;
+  }
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .gallery-card.col-8,
+  .gallery-card.col-6,
+  .gallery-card.col-4,
+  .gallery-card.col-12 {
+    grid-column: span 12;
+    height: 270px;
+  }
+  /* On touch screens, show subtle permanent title caption on gallery */
+  .gallery-overlay {
+    opacity: 1;
+    background: linear-gradient(0deg, rgba(33, 30, 27, 0.88) 0%, rgba(33, 30, 27, 0.25) 50%, transparent 100%);
+  }
+  .ticket-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .coach-selector-grid {
+    grid-template-columns: 1fr;
+  }
+  .ticket-footer-row {
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: stretch;
+    text-align: center;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2.2rem;
+  }
+  .station-board-container {
+    padding: 1.5rem 1.2rem;
+  }
+  .board-junction-title {
+    font-size: 1.2rem;
+  }
+  .table-scroll-hint {
+    display: block;
+  }
+}
+
+/* 3. Standard Mobile Phones (<= 540px) */
+@media (max-width: 540px) {
+  /* Ticker Header Strip */
+  .header-board-strip {
+    padding: 0.35rem 0.85rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+  .board-ticker-container {
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    mask-image: linear-gradient(90deg, transparent, #000 15px, #000 calc(100% - 15px), transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 15px, #000 calc(100% - 15px), transparent);
+  }
+  .board-ticker {
+    animation: marqueeTicker 18s linear infinite;
+    display: inline-flex;
+  }
+  @keyframes marqueeTicker {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+  .board-clock {
+    font-size: 0.68rem;
+    flex-shrink: 0;
+  }
+
+  /* Main Header */
+  .header-main {
+    padding: 0.65rem 0.85rem;
+    gap: 0.5rem;
+  }
+  .brand-logo {
+    gap: 0.6rem;
+  }
+  .logo-crest {
+    width: 36px;
+    height: 36px;
+  }
+  .logo-crest svg {
+    width: 18px;
+    height: 18px;
+  }
+  .logo-title {
+    font-size: 1.05rem;
+  }
+  .logo-subtitle {
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+  }
+  .header-actions {
+    gap: 0.45rem;
+  }
+  .ticket-cta-btn {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    gap: 0.4rem;
+  }
+  .ticket-cta-btn svg {
+    display: none;
+  }
+  .sound-toggle-btn {
+    width: 36px;
+    height: 36px;
+  }
+  .mobile-nav-toggle {
+    width: 38px;
+    height: 38px;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    padding-top: 6.2rem;
+  }
+  .hero-pill-badge {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.85rem;
+    margin-bottom: 1rem;
+  }
+  .hero-title {
+    font-size: clamp(2.1rem, 8.5vw, 3.2rem);
+    margin-bottom: 0.75rem;
+  }
+  .hero-tagline {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+  }
+  .hero-actions-row {
+    flex-direction: column;
+    width: 100%;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 0 0.5rem;
+  }
+  .btn-primary-rail,
+  .btn-secondary-rail {
+    width: 100%;
+    justify-content: center;
+    padding: 0.85rem 1.25rem;
+    font-size: 0.95rem;
+    min-height: 48px;
+  }
+  .train-hud-panel {
+    flex-direction: column;
+    gap: 0.45rem;
+    border-radius: 16px;
+    padding: 0.6rem 1rem;
+    width: 100%;
+    max-width: 320px;
+    margin: 0.5rem auto 0;
+  }
+  .hud-tip {
+    font-size: 0.72rem;
+    text-align: center;
+  }
+  .hero-railway-stage {
+    height: 180px;
+  }
+  .train-consist-wrapper {
+    transform: scale(0.72);
+    transform-origin: left bottom;
+  }
+
+  /* Menu Section */
+  .section-header {
+    margin-bottom: 2.2rem;
+  }
+  .section-eyebrow {
+    font-size: 0.8rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 6.5vw, 2.5rem);
+  }
+  .section-subtitle {
+    font-size: 0.95rem;
+  }
+  .menu-categories-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0.25rem 0.25rem 0.65rem;
+    margin-bottom: 2rem;
+    width: 100%;
+  }
+  .menu-categories-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .category-tab {
+    font-size: 0.82rem;
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .coach-window-item {
+    border-radius: 28px 28px 12px 12px;
+  }
+  .window-glass-viewport {
+    height: 220px;
+    border-radius: 24px 24px 0 0;
+  }
+  /* Mobile: Shutters animate smoothly open on tap toggle */
+  .coach-window-item .curtain-panel.left {
+    transform: translateX(0);
+    transition: transform 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  .coach-window-item .curtain-panel.right {
+    transform: translateX(0);
+    transition: transform 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  .coach-window-item.curtains-open .curtain-panel.left {
+    transform: translateX(-92%) !important;
+  }
+  .coach-window-item.curtains-open .curtain-panel.right {
+    transform: translateX(92%) !important;
+  }
+  .coach-window-item.curtains-open .window-glass-sheen {
+    left: 150% !important;
+  }
+  .coach-window-item.curtains-open .window-dish-img {
+    transform: scale(1.06) !important;
+  }
+  .window-content-panel {
+    padding: 1.2rem 1rem;
+  }
+  .window-dish-title {
+    font-size: 1.15rem;
+  }
+  .window-dish-desc {
+    font-size: 0.82rem;
+  }
+  .window-dish-price {
+    font-size: 1.2rem;
+  }
+
+  /* Reservations Vintage Ticket */
+  .ticket-envelope-sleeve {
+    padding: 0.35rem;
+    border-radius: 12px;
+  }
+  .ticket-container::before,
+  .ticket-container::after {
+    display: none;
+  }
+  .ticket-header-strip {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 1rem 0.75rem;
+  }
+  .ticket-train-no {
+    font-size: 0.85rem;
+  }
+  .ticket-header-title {
+    font-size: 1.15rem;
+  }
+  .ticket-class-badge {
+    font-size: 0.72rem;
+    padding: 0.25rem 0.6rem;
+  }
+  .ticket-route-row {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem 0.75rem;
+    text-align: center;
+  }
+  .route-station {
+    text-align: center !important;
+  }
+  .route-code {
+    font-size: 1.2rem;
+  }
+  .route-connector {
+    max-width: 100%;
+    width: 100%;
+  }
+  .ticket-barcode-strip {
+    padding: 0.6rem 0.75rem;
+    gap: 0.75rem;
+  }
+  .barcode-lines {
+    width: 100px;
+    height: 30px;
+  }
+  .barcode-pnr-text {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+  }
+  .ticket-form-body {
+    padding: 1.25rem 0.85rem;
+  }
+  .ticket-label {
+    font-size: 0.75rem;
+  }
+  .ticket-input,
+  .ticket-select {
+    font-size: 16px; /* 16px prevents iOS Safari form zoom */
+    padding: 0.65rem 0.75rem;
+  }
+  .coach-radio-card .coach-radio-box {
+    padding: 0.85rem;
+  }
+  .btn-book-ticket {
+    width: 100%;
+    padding: 0.95rem 1rem;
+    font-size: 0.95rem;
+    min-height: 50px;
+  }
+  .fare-title {
+    font-size: 0.72rem;
+  }
+  .fare-amount {
+    font-size: 0.75rem;
+  }
+
+  /* Departure Timetable */
+  .station-board-section {
+    padding: 4.5rem 0;
+  }
+  .station-board-container {
+    padding: 1.2rem 0.85rem;
+    border-width: 3px;
+  }
+  .board-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .table-scroll-hint {
+    display: block;
+  }
+  .board-timetable-table th,
+  .board-timetable-table td {
+    padding: 0.7rem 0.6rem;
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+  .flap-cell {
+    min-width: 65px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  /* Platform Enamel Signboard */
+  .platform-signboard-wrapper {
+    margin-bottom: 2.5rem;
+  }
+  .platform-enamel-sign {
+    padding: 1.1rem 1.25rem;
+    border-width: 5px;
+  }
+  .sign-hindi {
+    font-size: 1.55rem;
+  }
+  .sign-english {
+    font-size: 1.25rem;
+    letter-spacing: 0.08em;
+  }
+  .sign-elevation {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* Footer */
+  .site-footer {
+    padding: 3.5rem 0 2rem;
+  }
+  .footer-grid {
+    gap: 2rem;
+  }
+  .footer-desc {
+    font-size: 0.88rem;
+  }
+}
+
+/* 4. Compact Phones & Narrow Screens (<= 380px) */
+@media (max-width: 380px) {
+  .header-main {
+    padding: 0.5rem 0.6rem;
+  }
+  .logo-title {
+    font-size: 0.95rem;
+  }
+  .logo-subtitle {
+    display: none;
+  }
+  .ticket-cta-btn {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.68rem;
+  }
+  .hero-title {
+    font-size: 1.95rem;
+  }
+  .hero-pill-badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.65rem;
+  }
+  .train-consist-wrapper {
+    transform: scale(0.62);
+  }
+  .container,
+  .container-wide {
+    padding: 0 0.85rem;
+  }
+}

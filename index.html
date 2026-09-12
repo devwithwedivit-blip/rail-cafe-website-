@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>THE ROYAL RAIL CAFE | Luxury Heritage Dining On Tracks 🇮🇳</title>
+  <meta name="description" content="Step aboard The Royal Rail Cafe. Savor gourmet dining inside authentic vintage railway carriages featuring artisanal North Indian, Biryani, Sizzling Woks, Dim Sum, and Masala Kulhad Chai.">
+  
+  <!-- Favicon SVG -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚂</text></svg>">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/train.css">
+  <link rel="stylesheet" href="css/flap-board.css">
+  <link rel="stylesheet" href="css/ticket.css">
+</head>
+<body>
+
+  <!-- Custom Train Lantern Signal Cursor -->
+  <div id="custom-cursor" aria-hidden="true">
+    <div class="lantern-glow"></div>
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2C8.13 2 5 5.13 5 9C5 12.87 8.13 16 12 16C15.87 16 19 12.87 19 9C19 5.13 15.87 2 12 2Z" fill="#C89C3F" stroke="#7C1B26" stroke-width="1.5"/>
+      <circle cx="12" cy="9" r="4" fill="#FFEAA0" stroke="#E69D23" stroke-width="1"/>
+      <path d="M10 16L9 22H15L14 16" stroke="#561019" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="7" y1="22" x2="17" y2="22" stroke="#7C1B26" stroke-width="2" stroke-linecap="round"/>
+      <path d="M9 2C9 0.9 10.3 0 12 0C13.7 0 15 0.9 15 2" stroke="#C89C3F" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <!-- Background Steam Puff Particles Canvas -->
+  <canvas id="steam-canvas"></canvas>
+
+  <!-- Punched Ticket Particles Container -->
+  <div id="punch-particles-container" aria-hidden="true"></div>
+
+  <!-- ==========================================================================
+       SITE HEADER — Railway Departure Board Navbar
+       ========================================================================== -->
+  <header class="site-header" id="siteHeader">
+    <!-- Split-Flap Ticker Strip -->
+    <div class="header-board-strip">
+      <div class="board-ticker-container">
+        <div class="board-ticker" id="boardTicker">
+          <span class="ticker-item">
+            <span class="status-dot"></span>
+            <span>PLATFORM 1</span>
+          </span>
+          <span class="ticker-item">◆</span>
+          <span class="ticker-item">THE ROYAL RAIL CAFE EXPRESS</span>
+          <span class="ticker-item">◆</span>
+          <span class="ticker-item">DESTINATION: ROYAL CULINARY NIRVANA</span>
+          <span class="ticker-item">◆</span>
+          <span class="ticker-item" style="color:#2ECC71;">STATUS: DINING ON TIME</span>
+        </div>
+      </div>
+      <div class="board-clock" id="stationMasterClock">
+        20:30:00 IST
+      </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <div class="header-main">
+      <a href="#hero" class="brand-logo" id="navBrandLogo">
+        <div class="logo-crest">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">THE ROYAL RAIL CAFE</span>
+          <span class="logo-subtitle">EST. 2023 • ROYAL HERITAGE DINING</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links with Mechanical Flap Letters on Hover -->
+      <nav aria-label="Main Navigation" class="desktop-nav">
+        <ul class="nav-links">
+          <li class="nav-item"><a href="#menu" class="nav-link" id="navLinkMenu">MENU</a></li>
+          <li class="nav-item"><a href="#gallery" class="nav-link" id="navLinkGallery">GALLERY</a></li>
+          <li class="nav-item"><a href="#reservations" class="nav-link" id="navLinkReserve">RESERVE</a></li>
+          <li class="nav-item"><a href="#timetable" class="nav-link" id="navLinkTimetable">TIMETABLE</a></li>
+          <li class="nav-item"><a href="#location" class="nav-link" id="navLinkLocation">LOCATION</a></li>
+        </ul>
+      </nav>
+
+      <!-- Action Controls -->
+      <div class="header-actions">
+        <!-- Sound Whistle Toggle -->
+        <button class="sound-toggle-btn" id="soundToggleBtn" aria-label="Toggle Train Sounds" title="Play Authentic Train Sounds">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <div class="sound-waves"></div>
+        </button>
+
+        <!-- Book a Table CTA Button -->
+        <a href="#reservations" class="ticket-cta-btn" id="headerCtaBtn">
+          <span>BOOK A TABLE</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+
+        <!-- Mobile Drawer Toggle -->
+        <button class="mobile-nav-toggle" id="mobileNavToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Drawer Overlay -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true">
+      <div class="mobile-drawer-header">
+        <div class="mobile-drawer-brand">
+          <div class="logo-crest mini">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+            </svg>
+          </div>
+          <span>THE ROYAL RAIL CAFE</span>
+        </div>
+        <button class="mobile-drawer-close" id="mobileDrawerClose" aria-label="Close navigation menu">✕</button>
+      </div>
+
+      <div class="mobile-drawer-links">
+        <a href="#menu" class="mobile-nav-link" id="mobLinkMenu">
+          <span class="nav-link-num">01</span>
+          <span class="nav-link-title">CARRIAGE MENU</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+        <a href="#gallery" class="mobile-nav-link" id="mobLinkGallery">
+          <span class="nav-link-num">02</span>
+          <span class="nav-link-title">HERITAGE GALLERY</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+        <a href="#reservations" class="mobile-nav-link" id="mobLinkReserve">
+          <span class="nav-link-num">03</span>
+          <span class="nav-link-title">TICKET RESERVATION</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+        <a href="#timetable" class="mobile-nav-link" id="mobLinkTimetable">
+          <span class="nav-link-num">04</span>
+          <span class="nav-link-title">STATION TIMETABLE</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+        <a href="#location" class="mobile-nav-link" id="mobLinkLocation">
+          <span class="nav-link-num">05</span>
+          <span class="nav-link-title">LOCATION & MAP</span>
+          <span class="nav-link-arrow">→</span>
+        </a>
+      </div>
+
+      <div class="mobile-drawer-footer">
+        <a href="https://wa.me/917500045675?text=Hello%20The%20Royal%20Rail%20Cafe%2C%20I%20would%20like%20to%20place%20an%20order." target="_blank" rel="noopener noreferrer" class="btn-primary-rail full-width mobile-drawer-book-btn" id="mobDrawerWaBtn" style="background: linear-gradient(135deg, #25D366, #128C7E); border-color: var(--rail-gold); margin-bottom: 0.6rem;">
+          <span>Order on WhatsApp 📲</span>
+          <span>07500045675</span>
+        </a>
+        <a href="#reservations" class="btn-primary-rail full-width mobile-drawer-book-btn" id="mobDrawerReserveBtn">
+          <span>Book a Dining Berth</span>
+          <span>🎟️</span>
+        </a>
+        <div class="mobile-drawer-info">
+          <span>🚂 Bareilly Junction • Platform Yard</span>
+          <span>📞 Hotline: 07500045675 / +91 75000 45675</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="mobile-nav-backdrop" id="mobileNavBackdrop" aria-hidden="true"></div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO SECTION — Animated 2D Train, Speed Controller, Track & Signals
+       ========================================================================== -->
+  <section class="hero-section" id="hero">
+    <!-- Parallax Scenery Background Layers -->
+    <div class="hero-scenery-backdrop" aria-hidden="true">
+      <div class="scenery-layer scenery-sky"></div>
+      <!-- Distant Hills Silhouette -->
+      <div class="scenery-layer scenery-hills" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1200 120%22 preserveAspectRatio=%22none%22><path d=%22M0,120 L0,70 Q150,20 300,75 T600,60 T900,80 T1200,50 L1200,120 Z%22 fill=%22%23D1C8B4%22/></svg>');"></div>
+      <!-- Telegraph Poles & Cateneries -->
+      <div class="scenery-layer scenery-poles" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 100%22 preserveAspectRatio=%22none%22><line x1=%2250%22 y1=%2210%22 x2=%2250%22 y2=%22100%22 stroke=%22%238A8272%22 stroke-width=%223%22/><line x1=%2230%22 y1=%2225%22 x2=%2270%22 y2=%2225%22 stroke=%22%238A8272%22 stroke-width=%222%22/><circle cx=%2235%22 cy=%2220%22 r=%223%22 fill=%22%23555%22/><circle cx=%2265%22 cy=%2220%22 r=%223%22 fill=%22%23555%22/><path d=%22M50,25 Q225,55 400,25%22 fill=%22none%22 stroke=%22%23A39B8B%22 stroke-width=%221%22/></svg>');"></div>
+    </div>
+
+    <!-- Hero Widescreen Content -->
+    <div class="hero-content">
+      <div class="hero-pill-badge">
+        <span>🇮🇳 PLATFORM NO. 1</span>
+        <span>•</span>
+        <span>ROYAL DINING ON REAL TRACKS</span>
+      </div>
+
+      <h1 class="hero-title">
+        THE ROYAL RAIL CAFE
+      </h1>
+
+      <p class="hero-tagline">
+        India’s premier royal heritage rail restaurant. Savor gourmet wonders, artisanal teas, and majestic feasts inside authentic restored vintage railway carriages.
+      </p>
+
+      <div class="hero-actions-row">
+        <a href="#reservations" class="btn-primary-rail" id="heroReserveBtn">
+          <span>Book a Compartment</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        </a>
+        <a href="#menu" class="btn-secondary-rail" id="heroMenuBtn">
+          <span>Explore Carriage Menu</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="10 8 16 12 10 16 10 8"></polygon>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Train Speed HUD with Mouse & Touch Support -->
+      <div class="train-hud-panel" id="trainHud">
+        <div class="hud-speedometer">
+          <div class="speed-gauge-dial">
+            <svg viewBox="0 0 32 32">
+              <circle cx="16" cy="16" r="14" fill="#F8F4EC" stroke="#C89C3F" stroke-width="2"/>
+              <line x1="16" y1="16" x2="16" y2="6" stroke="#7C1B26" stroke-width="2" stroke-linecap="round" class="gauge-needle" id="gaugeNeedle"/>
+              <circle cx="16" cy="16" r="3" fill="#7C1B26"/>
+            </svg>
+          </div>
+          <span id="speedGaugeVal">45 km/h</span>
+        </div>
+        <span class="hud-tip">⇄ Slide or touch horizontally to throttle speed</span>
+        <button class="btn-train-whistle" id="heroWhistleBtn" title="Sound Train Whistle">
+          <span>🔊 Whistle</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Railway Track & Moving Train Stage -->
+    <div class="hero-railway-stage" id="heroRailwayStage">
+      <!-- Full-Width Railway Track Assembly -->
+      <div class="railway-track-assembly">
+        <div class="track-ballast"></div>
+        <div class="track-sleepers" id="trackSleepers"></div>
+        <div class="track-rails"></div>
+        <div class="track-rails-bottom"></div>
+      </div>
+
+      <!-- 2D Animated SVG Train Consist (Engine + Tender + Coach 1 + Coach 2) -->
+      <div class="train-consist-wrapper">
+        <div class="train-consist" id="trainConsist">
+          <div class="train-bob-assembly">
+
+            <!-- 1. COACH B: THE HERITAGE DINER (Forest Green Livery) -->
+            <div class="train-unit passenger-coach" id="coachBUnit">
+              <svg viewBox="0 0 280 125" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Underframe & Bogie Suspension -->
+                <rect x="10" y="88" width="260" height="12" rx="2" fill="#2B2723"/>
+                <!-- Bogie Wheels Left -->
+                <g class="wheel-spoked" style="transform-origin: 45px 105px;">
+                  <circle cx="45" cy="105" r="14" fill="#555" stroke="#222" stroke-width="3"/>
+                  <circle cx="45" cy="105" r="5" fill="#C89C3F"/>
+                  <line x1="45" y1="91" x2="45" y2="119" stroke="#DDD" stroke-width="2"/>
+                  <line x1="31" y1="105" x2="59" y2="105" stroke="#DDD" stroke-width="2"/>
+                </g>
+                <g class="wheel-spoked" style="transform-origin: 85px 105px;">
+                  <circle cx="85" cy="105" r="14" fill="#555" stroke="#222" stroke-width="3"/>
+                  <circle cx="85" cy="105" r="5" fill="#C89C3F"/>
+                  <line x1="85" y1="91" x2="85" y2="119" stroke="#DDD" stroke-width="2"/>
+                  <line x1="71" y1="105" x2="99" y2="105" stroke="#DDD" stroke-width="2"/>
+                </g>
+                <!-- Bogie Wheels Right -->
+                <g class="wheel-spoked" style="transform-origin: 195px 105px;">
+                  <circle cx="195" cy="105" r="14" fill="#555" stroke="#222" stroke-width="3"/>
+                  <circle cx="195" cy="105" r="5" fill="#C89C3F"/>
+                  <line x1="195" y1="91" x2="195" y2="119" stroke="#DDD" stroke-width="2"/>
+                  <line x1="181" y1="105" x2="209" y2="105" stroke="#DDD" stroke-width="2"/>
+                </g>
+                <g class="wheel-spoked" style="transform-origin: 235px 105px;">
+                  <circle cx="235" cy="105" r="14" fill="#555" stroke="#222" stroke-width="3"/>
+                  <circle cx="235" cy="105" r="5" fill="#C89C3F"/>
+                  <line x1="235" y1="91" x2="235" y2="119" stroke="#DDD" stroke-width="2"/>
+                  <line x1="221" y1="105" x2="249" y2="105" stroke="#DDD" stroke-width="2"/>
+                </g>
+                <!-- Coach Body (Forest Green Lower, Cream Upper) -->
+                <path d="M12 25 Q12 12 25 12 L255 12 Q268 12 268 25 L268 90 L12 90 Z" fill="#1E4D36"/>
+                <path d="M12 25 Q12 12 25 12 L255 12 Q268 12 268 25 L268 55 L12 55 Z" fill="#FAF6EE"/>
+                <!-- Brass Dividing Trim -->
+                <rect x="12" y="53" width="256" height="4" fill="#C89C3F"/>
+                <!-- Clerestory Roof Curve -->
+                <path d="M22 12 Q22 6 35 6 L245 6 Q258 6 258 12 Z" fill="#E2DAC8"/>
+                <!-- Coach Windows with Warm Dinner Glow -->
+                <rect x="35" y="24" width="36" height="24" rx="8" class="coach-window-glow coach-interior-light"/>
+                <rect x="85" y="24" width="36" height="24" rx="8" class="coach-window-glow coach-interior-light"/>
+                <rect x="135" y="24" width="36" height="24" rx="8" class="coach-window-glow coach-interior-light"/>
+                <rect x="185" y="24" width="36" height="24" rx="8" class="coach-window-glow coach-interior-light"/>
+                <rect x="232" y="22" width="22" height="60" rx="3" fill="#143625" stroke="#C89C3F" stroke-width="1.5"/>
+                <!-- Diner Silhouettes Inside Windows -->
+                <circle cx="53" cy="36" r="5" fill="#4B3A23" opacity="0.6"/>
+                <circle cx="103" cy="36" r="5" fill="#4B3A23" opacity="0.6"/>
+                <circle cx="153" cy="36" r="5" fill="#4B3A23" opacity="0.6"/>
+                <!-- Golden Coach Lettering -->
+                <text x="140" y="75" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9" fill="#E5C268" text-anchor="middle" letter-spacing="2">HERITAGE DINER • COACH B</text>
+              </svg>
+            </div>
+
+            <!-- Coupler Joint -->
+            <div class="train-coupler-joint"></div>
+
+            <!-- 2. COACH A: THE ROYAL SALOON (Heritage Maroon Livery) -->
+            <div class="train-unit passenger-coach" id="coachAUnit">
+              <svg viewBox="0 0 280 125" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Underframe & Bogies -->
+                <rect x="10" y="88" width="260" height="12" rx="2" fill="#2B2723"/>
+                <!-- Left Bogie Wheels -->
+                <g class="wheel-spoked" style="transform-origin: 45px 105px;">
+                  <circle cx="45" cy="105" r="14" fill="#555" stroke="#222" stroke-width="3"/>
+                  <circle cx="45" cy="105" r="5" fill="#C89C3F"/>
+                  <line x1="45" y1="91" x2="45" y2="119" stroke="#DDD" stroke-width="2"/>
+                  <line x1="31" y1="105" x2="59" y2="105" stroke="#DDD" stroke-width="2"/>
+                </g>
+                <g class="wheel-spoked" style="transform-origin: 85px 105px;">
+                  <circle cx="85" cy="105" r="14" fill="#555" stroke="#222" stroke-width="3"/>
+                  <circle cx="85" cy="105" r="5" fill="#C89C3F"/>
+                  <line x1="85" y1="91" x2="85" y2="119" stroke="#DDD" stroke-width="2"/>
+                  <line x1="71" y1="105" x2="99" y2="105" stroke="#DDD" stroke-width="2"/>
+                </g>
+                <!-- Right Bogie Wheels -->
+                <g class="wheel-spoked" style="transform-origin: 195px 105px;">
+                  <circle cx="195" cy="105" r="14" fill="#555" stroke="#222" stroke-width="3"/>
+                  <circle cx="195" cy="105" r="5" fill="#C89C3F"/>
+                  <line x1="195" y1="91" x2="195" y2="119" stroke="#DDD" stroke-width="2"/>
+                  <line x1="181" y1="105" x2="209" y2="105" stroke="#DDD" stroke-width="2"/>
+                </g>
+                <g class="wheel-spoked" style="transform-origin: 235px 105px;">
+                  <circle cx="235" cy="105" r="14" fill="#555" stroke="#222" stroke-width="3"/>
+                  <circle cx="235" cy="105" r="5" fill="#C89C3F"/>
+                  <line x1="235" y1="91" x2="235" y2="119" stroke="#DDD" stroke-width="2"/>
+                  <line x1="221" y1="105" x2="249" y2="105" stroke="#DDD" stroke-width="2"/>
+                </g>
+                <!-- Coach Body (Maroon Lower, Cream Upper) -->
+                <path d="M12 25 Q12 12 25 12 L255 12 Q268 12 268 25 L268 90 L12 90 Z" fill="#7C1B26"/>
+                <path d="M12 25 Q12 12 25 12 L255 12 Q268 12 268 25 L268 55 L12 55 Z" fill="#FAF6EE"/>
+                <!-- Brass Dividing Trim -->
+                <rect x="12" y="53" width="256" height="4" fill="#C89C3F"/>
+                <!-- Clerestory Roof Curve -->
+                <path d="M22 12 Q22 6 35 6 L245 6 Q258 6 258 12 Z" fill="#E2DAC8"/>
+                <!-- Arched Windows with Warm Glow -->
+                <rect x="35" y="24" width="36" height="24" rx="8" class="coach-window-glow coach-interior-light"/>
+                <rect x="85" y="24" width="36" height="24" rx="8" class="coach-window-glow coach-interior-light"/>
+                <rect x="135" y="24" width="36" height="24" rx="8" class="coach-window-glow coach-interior-light"/>
+                <rect x="185" y="24" width="36" height="24" rx="8" class="coach-window-glow coach-interior-light"/>
+                <rect x="232" y="22" width="22" height="60" rx="3" fill="#561019" stroke="#C89C3F" stroke-width="1.5"/>
+                <!-- Diners Silhouettes -->
+                <circle cx="53" cy="36" r="5" fill="#4B3A23" opacity="0.6"/>
+                <circle cx="103" cy="36" r="5" fill="#4B3A23" opacity="0.6"/>
+                <circle cx="203" cy="36" r="5" fill="#4B3A23" opacity="0.6"/>
+                <!-- Gold Coach Inscription -->
+                <text x="140" y="75" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9" fill="#E5C268" text-anchor="middle" letter-spacing="2">THE ROYAL SALOON • COACH A</text>
+              </svg>
+            </div>
+
+            <!-- Coupler Joint -->
+            <div class="train-coupler-joint"></div>
+
+            <!-- 3. COAL TENDER -->
+            <div class="train-unit coal-tender">
+              <svg viewBox="0 0 140 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Underframe & Wheels -->
+                <rect x="5" y="68" width="130" height="10" rx="2" fill="#222"/>
+                <g class="wheel-spoked" style="transform-origin: 32px 82px;">
+                  <circle cx="32" cy="82" r="12" fill="#444" stroke="#111" stroke-width="2.5"/>
+                  <circle cx="32" cy="82" r="4" fill="#C89C3F"/>
+                  <line x1="32" y1="70" x2="32" y2="94" stroke="#DDD" stroke-width="2"/>
+                  <line x1="20" y1="82" x2="44" y2="82" stroke="#DDD" stroke-width="2"/>
+                </g>
+                <g class="wheel-spoked" style="transform-origin: 70px 82px;">
+                  <circle cx="70" cy="82" r="12" fill="#444" stroke="#111" stroke-width="2.5"/>
+                  <circle cx="70" cy="82" r="4" fill="#C89C3F"/>
+                  <line x1="70" y1="70" x2="70" y2="94" stroke="#DDD" stroke-width="2"/>
+                  <line x1="58" y1="82" x2="82" y2="82" stroke="#DDD" stroke-width="2"/>
+                </g>
+                <g class="wheel-spoked" style="transform-origin: 108px 82px;">
+                  <circle cx="108" cy="82" r="12" fill="#444" stroke="#111" stroke-width="2.5"/>
+                  <circle cx="108" cy="82" r="4" fill="#C89C3F"/>
+                  <line x1="108" y1="70" x2="108" y2="94" stroke="#DDD" stroke-width="2"/>
+                  <line x1="96" y1="82" x2="120" y2="82" stroke="#DDD" stroke-width="2"/>
+                </g>
+                <!-- Coal Heap & Tank -->
+                <path d="M10 28 Q45 14 70 18 Q100 12 130 28 L130 70 L10 70 Z" fill="#262320"/>
+                <path d="M12 30 L128 30 L128 70 L12 70 Z" fill="#7C1B26"/>
+                <rect x="12" y="42" width="116" height="3" fill="#C89C3F"/>
+                <!-- Tender Text -->
+                <text x="70" y="58" font-family="'Share Tech Mono', monospace" font-size="8" fill="#E5C268" text-anchor="middle" letter-spacing="1">RRC-EXPRESS</text>
+              </svg>
+            </div>
+
+            <!-- 4. STEAM LOCOMOTIVE ENGINE -->
+            <div class="train-unit locomotive-engine">
+              <!-- Chimney Smoke Stream -->
+              <div class="smokestack-exhaust">
+                <div class="smoke-cloud-puff puff-1"></div>
+                <div class="smoke-cloud-puff puff-2"></div>
+                <div class="smoke-cloud-puff puff-3"></div>
+              </div>
+
+              <!-- Headlight Beam -->
+              <div class="locomotive-headlight-beam"></div>
+
+              <svg viewBox="0 0 250 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Cowcatcher / Cattle Guard -->
+                <polygon points="220,105 245,115 220,122" fill="#555" stroke="#222" stroke-width="1.5"/>
+                <!-- Locomotive Cab (Back) -->
+                <path d="M10 20 L75 20 L75 95 L10 95 Z" fill="#7C1B26"/>
+                <path d="M5 20 Q5 14 20 14 L75 14 L75 22 L5 22 Z" fill="#2B2723"/>
+                <!-- Cab Window with Driver Silhouette -->
+                <rect x="22" y="32" width="30" height="26" rx="4" class="coach-window-glow"/>
+                <circle cx="37" cy="45" r="7" fill="#3D2614"/>
+                <rect x="31" y="52" width="12" height="6" fill="#3D2614"/>
+
+                <!-- Boiler Cylinder (Main Body) -->
+                <rect x="75" y="40" width="145" height="55" rx="5" fill="#37332D"/>
+                <!-- Brass Bands on Boiler -->
+                <rect x="95" y="40" width="4" height="55" fill="#C89C3F"/>
+                <rect x="135" y="40" width="4" height="55" fill="#C89C3F"/>
+                <rect x="175" y="40" width="4" height="55" fill="#C89C3F"/>
+                <circle cx="220" cy="67" r="28" fill="#561019" stroke="#C89C3F" stroke-width="2"/>
+
+                <!-- Smokestack Chimney -->
+                <path d="M185 40 L188 12 L202 12 L205 40 Z" fill="#222" stroke="#C89C3F" stroke-width="1.5"/>
+                <ellipse cx="195" cy="12" rx="9" ry="3" fill="#C89C3F"/>
+
+                <!-- Steam Dome & Bell -->
+                <path d="M110 40 Q110 24 125 24 Q140 24 140 40 Z" fill="#C89C3F"/>
+                <path d="M150 40 Q150 30 160 30 Q170 30 170 40 Z" fill="#C89C3F"/>
+
+                <!-- Big Golden Headlight Lantern -->
+                <rect x="225" y="55" width="16" height="24" rx="3" fill="#C89C3F" stroke="#7C1B26" stroke-width="1.5"/>
+                <circle cx="233" cy="67" r="7" fill="#FFFDE0" stroke="#E69D23" stroke-width="1.5"/>
+
+                <!-- Driver Wheels (3 Big Spoked Wheels) -->
+                <g class="wheel-spoked" style="transform-origin: 50px 105px;">
+                  <circle cx="50" cy="105" r="18" fill="#222" stroke="#C89C3F" stroke-width="3"/>
+                  <circle cx="50" cy="105" r="6" fill="#7C1B26"/>
+                  <line x1="50" y1="87" x2="50" y2="123" stroke="#FFF" stroke-width="2"/>
+                  <line x1="32" y1="105" x2="68" y2="105" stroke="#FFF" stroke-width="2"/>
+                  <line x1="37" y1="92" x2="63" y2="118" stroke="#FFF" stroke-width="2"/>
+                  <line x1="37" y1="118" x2="63" y2="92" stroke="#FFF" stroke-width="2"/>
+                </g>
+
+                <g class="wheel-spoked" style="transform-origin: 100px 105px;">
+                  <circle cx="100" cy="105" r="18" fill="#222" stroke="#C89C3F" stroke-width="3"/>
+                  <circle cx="100" cy="105" r="6" fill="#7C1B26"/>
+                  <line x1="100" y1="87" x2="100" y2="123" stroke="#FFF" stroke-width="2"/>
+                  <line x1="82" y1="105" x2="118" y2="105" stroke="#FFF" stroke-width="2"/>
+                  <line x1="87" y1="92" x2="113" y2="118" stroke="#FFF" stroke-width="2"/>
+                  <line x1="87" y1="118" x2="113" y2="92" stroke="#FFF" stroke-width="2"/>
+                </g>
+
+                <g class="wheel-spoked" style="transform-origin: 150px 105px;">
+                  <circle cx="150" cy="105" r="18" fill="#222" stroke="#C89C3F" stroke-width="3"/>
+                  <circle cx="150" cy="105" r="6" fill="#7C1B26"/>
+                  <line x1="150" y1="87" x2="150" y2="123" stroke="#FFF" stroke-width="2"/>
+                  <line x1="132" y1="105" x2="168" y2="105" stroke="#FFF" stroke-width="2"/>
+                  <line x1="137" y1="92" x2="163" y2="118" stroke="#FFF" stroke-width="2"/>
+                  <line x1="137" y1="118" x2="163" y2="92" stroke="#FFF" stroke-width="2"/>
+                </g>
+
+                <!-- Front Pilot Wheel -->
+                <g class="wheel-spoked" style="transform-origin: 200px 112px;">
+                  <circle cx="200" cy="112" r="10" fill="#444" stroke="#111" stroke-width="2"/>
+                  <circle cx="200" cy="112" r="3" fill="#C89C3F"/>
+                  <line x1="200" y1="102" x2="200" y2="122" stroke="#DDD" stroke-width="1.5"/>
+                  <line x1="190" y1="112" x2="210" y2="112" stroke="#DDD" stroke-width="1.5"/>
+                </g>
+
+                <!-- Connecting Rod & Piston Assembly -->
+                <rect x="45" y="102" width="110" height="6" rx="2" fill="#E2DAC8" stroke="#333" stroke-width="1" class="locomotive-piston-rod"/>
+              </svg>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator Styled as Railway Signal Lamp -->
+      <div class="hero-scroll-indicator">
+        <a href="#menu" class="signal-post-indicator" id="heroScrollSignal">
+          <div class="signal-lamp-icon">
+            <div class="signal-lamp-green"></div>
+          </div>
+          <span>ALL CLEAR • EXPLORE MENU</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================================================
+       SECTION DIVIDER: Railway Coupling Knuckle
+       ========================================================================== -->
+  <div class="coupling-divider" aria-hidden="true">
+    <div class="coupling-line"></div>
+    <div class="coupling-knuckle">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="12" r="10"/>
+      </svg>
+      <span>PANTRY CAR • CARRIAGE WINDOW MENU</span>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MENU SECTION — Styled as Coach Windows with 3D Mouse Tilt & Sliding Curtains
+       ========================================================================== -->
+  <section class="menu-section" id="menu">
+    <div class="container-wide">
+      <div class="section-header">
+        <div class="section-eyebrow">Culinary Compartments</div>
+        <h2 class="section-title">Coach Window Delicacies</h2>
+        <p class="section-subtitle">
+          Hover over each carriage window (or tap on mobile) to slide open the velvet curtains and peek at our chef’s journey-inspired creations.
+        </p>
+      </div>
+
+      <!-- Menu Category Filter Tabs -->
+      <div class="menu-categories-tabs" role="tablist">
+        <button class="category-tab active" data-category="all" role="tab" id="tabAll">
+          <span>🚂 All Compartments</span>
+        </button>
+        <button class="category-tab" data-category="woks" role="tab" id="tabWoks">
+          <span>🥢 Sizzling Woks</span>
+        </button>
+        <button class="category-tab" data-category="biryani" role="tab" id="tabBiryani">
+          <span>🍚 Royal Biryani</span>
+        </button>
+        <button class="category-tab" data-category="dimsum" role="tab" id="tabDimsum">
+          <span>🥟 Artisanal Dim Sum</span>
+        </button>
+        <button class="category-tab" data-category="north-indian" role="tab" id="tabNorthIndian">
+          <span>🥘 North Indian Feast</span>
+        </button>
+        <button class="category-tab" data-category="beverages" role="tab" id="tabBeverages">
+          <span>☕ Kulhad Chai & Drinks</span>
+        </button>
+        <button class="category-tab" data-category="desserts" role="tab" id="tabDesserts">
+          <span>🍫 Sizzling Desserts</span>
+        </button>
+      </div>
+
+      <!-- Coach Windows Menu Grid -->
+      <div class="coach-windows-grid" id="menuGrid">
+
+        <!-- 1. Sizzling Wok Hakka Noodles -->
+        <article class="coach-window-item" data-category="woks" data-dish="Railway Sizzling Wok" data-price="₹425">
+          <div class="window-frame-trim"></div>
+          <div class="window-rivets-top">
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+          </div>
+
+          <div class="window-glass-viewport">
+            <img src="assets/images/wok.jpg" alt="Cast iron skillet of sizzling Hakka noodles and chili paneer" class="window-dish-img" loading="lazy">
+            <!-- Royal Velvet Drapes Framing Carriage Window (Non-closing) -->
+            <div class="window-curtain-layer" aria-hidden="true">
+              <div class="curtain-panel left"></div>
+              <div class="curtain-panel right"></div>
+            </div>
+            <!-- Glass Sheen Glare -->
+            <div class="window-glass-sheen"></div>
+          </div>
+
+          <div class="window-content-panel">
+            <div>
+              <div class="window-meta-row">
+                <span class="dish-dietary-badge">
+                  <span class="dietary-square veg"></span>
+                  <span>Vegetarian Special</span>
+                </span>
+                <span class="window-dish-price">₹425</span>
+              </div>
+              <h3 class="window-dish-title">Railway Sizzling Wok</h3>
+              <p class="window-dish-desc">
+                Hand-pulled artisanal noodles wok-tossed with smoked chili garlic sauce, crispy paneer chunks, charred peppers, and toasted sesame.
+              </p>
+            </div>
+            <div class="window-dish-footer">
+              <span class="berth-serving-tag">Coach Pantry • Serves 2</span>
+              <a href="https://wa.me/917500045675?text=Hello%20The%20Royal%20Rail%20Cafe%2C%20I%20would%20like%20to%20order%3A%20Railway%20Sizzling%20Wok%20(%E2%82%B9425)%20from%20the%20Carriage%20Menu." target="_blank" rel="noopener noreferrer" class="btn-order-dish btn-order-whatsapp" data-dish="Railway Sizzling Wok" data-price="₹425" aria-label="Order Railway Sizzling Wok on WhatsApp">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                <span>Order on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2. Royal Awadhi Dum Biryani -->
+        <article class="coach-window-item" data-category="biryani" data-dish="Nawab's Handi Biryani" data-price="₹575">
+          <div class="window-frame-trim"></div>
+          <div class="window-rivets-top">
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+          </div>
+
+          <div class="window-glass-viewport">
+            <img src="assets/images/biryani.jpg" alt="Royal Awadhi Dum Biryani in brass handi" class="window-dish-img" loading="lazy">
+            <div class="window-curtain-layer" aria-hidden="true">
+              <div class="curtain-panel left"></div>
+              <div class="curtain-panel right"></div>
+            </div>
+            <div class="window-glass-sheen"></div>
+          </div>
+
+          <div class="window-content-panel">
+            <div>
+              <div class="window-meta-row">
+                <span class="dish-dietary-badge">
+                  <span class="dietary-square non-veg"></span>
+                  <span>Chef Signature</span>
+                </span>
+                <span class="window-dish-price">₹575</span>
+              </div>
+              <h3 class="window-dish-title">Nawab's Handi Biryani</h3>
+              <p class="window-dish-desc">
+                Slow dum-cooked aromatic basmati rice sealed with dough, infused with kewra, saffron, whole spices, garnished with edible silver vark and pomegranate raita.
+              </p>
+            </div>
+            <div class="window-dish-footer">
+              <span class="berth-serving-tag">The Royal Saloon • Serves 2</span>
+              <a href="https://wa.me/917500045675?text=Hello%20The%20Royal%20Rail%20Cafe%2C%20I%20would%20like%20to%20order%3A%20Nawab%27s%20Handi%20Biryani%20(%E2%82%B9575)%20from%20the%20Carriage%20Menu." target="_blank" rel="noopener noreferrer" class="btn-order-dish btn-order-whatsapp" data-dish="Nawab's Handi Biryani" data-price="₹575" aria-label="Order Nawab's Handi Biryani on WhatsApp">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                <span>Order on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3. Steamed Crystal Dim Sum -->
+        <article class="coach-window-item" data-category="dimsum" data-dish="Truffle Crystal Dim Sum" data-price="₹465">
+          <div class="window-frame-trim"></div>
+          <div class="window-rivets-top">
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+          </div>
+
+          <div class="window-glass-viewport">
+            <img src="assets/images/dimsum.jpg" alt="Steamed crystal dim sum dumplings in bamboo basket" class="window-dish-img" loading="lazy">
+            <div class="window-curtain-layer" aria-hidden="true">
+              <div class="curtain-panel left"></div>
+              <div class="curtain-panel right"></div>
+            </div>
+            <div class="window-glass-sheen"></div>
+          </div>
+
+          <div class="window-content-panel">
+            <div>
+              <div class="window-meta-row">
+                <span class="dish-dietary-badge">
+                  <span class="dietary-square veg"></span>
+                  <span>Bamboo Steamer</span>
+                </span>
+                <span class="window-dish-price">₹465</span>
+              </div>
+              <h3 class="window-dish-title">Truffle Crystal Dim Sum</h3>
+              <p class="window-dish-desc">
+                Translucent parcels filled with wild mushrooms, edamame, and water chestnuts, drizzled with house Sichuan chili oil and shredded ginger.
+              </p>
+            </div>
+            <div class="window-dish-footer">
+              <span class="berth-serving-tag">Orient Express • 6 Pieces</span>
+              <a href="https://wa.me/917500045675?text=Hello%20The%20Royal%20Rail%20Cafe%2C%20I%20would%20like%20to%20order%3A%20Truffle%20Crystal%20Dim%20Sum%20(%E2%82%B9465)%20from%20the%20Carriage%20Menu." target="_blank" rel="noopener noreferrer" class="btn-order-dish btn-order-whatsapp" data-dish="Truffle Crystal Dim Sum" data-price="₹465" aria-label="Order Truffle Crystal Dim Sum on WhatsApp">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                <span>Order on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4. North Indian Feast -->
+        <article class="coach-window-item" data-category="north-indian" data-dish="Frontier Rail Feast" data-price="₹620">
+          <div class="window-frame-trim"></div>
+          <div class="window-rivets-top">
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+          </div>
+
+          <div class="window-glass-viewport">
+            <img src="assets/images/north_indian.jpg" alt="Dal Makhani, Naan and Paneer feast on copper thali" class="window-dish-img" loading="lazy">
+            <div class="window-curtain-layer" aria-hidden="true">
+              <div class="curtain-panel left"></div>
+              <div class="curtain-panel right"></div>
+            </div>
+            <div class="window-glass-sheen"></div>
+          </div>
+
+          <div class="window-content-panel">
+            <div>
+              <div class="window-meta-row">
+                <span class="dish-dietary-badge">
+                  <span class="dietary-square veg"></span>
+                  <span>Grand Thali</span>
+                </span>
+                <span class="window-dish-price">₹620</span>
+              </div>
+              <h3 class="window-dish-title">Frontier Rail Feast</h3>
+              <p class="window-dish-desc">
+                24-hour slow simmered black Dal Makhani with fresh white butter, rich Paneer Lababdar, and charred garlic butter naan hot from our tandoor.
+              </p>
+            </div>
+            <div class="window-dish-footer">
+              <span class="berth-serving-tag">Grand Trunk Route • Full Meal</span>
+              <a href="https://wa.me/917500045675?text=Hello%20The%20Royal%20Rail%20Cafe%2C%20I%20would%20like%20to%20order%3A%20Frontier%20Rail%20Feast%20(%E2%82%B9620)%20from%20the%20Carriage%20Menu." target="_blank" rel="noopener noreferrer" class="btn-order-dish btn-order-whatsapp" data-dish="Frontier Rail Feast" data-price="₹620" aria-label="Order Frontier Rail Feast on WhatsApp">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                <span>Order on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5. Masala Kulhad Chai & Beverages -->
+        <article class="coach-window-item" data-category="beverages" data-dish="Railway Kulhad Masala Chai" data-price="₹145">
+          <div class="window-frame-trim"></div>
+          <div class="window-rivets-top">
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+          </div>
+
+          <div class="window-glass-viewport">
+            <img src="assets/images/chai.jpg" alt="Railway kettle and steaming Masala Chai in terracotta kulhads" class="window-dish-img" loading="lazy">
+            <div class="window-curtain-layer" aria-hidden="true">
+              <div class="curtain-panel left"></div>
+              <div class="curtain-panel right"></div>
+            </div>
+            <div class="window-glass-sheen"></div>
+          </div>
+
+          <div class="window-content-panel">
+            <div>
+              <div class="window-meta-row">
+                <span class="dish-dietary-badge">
+                  <span class="dietary-square veg"></span>
+                  <span>Pure Nostalgia</span>
+                </span>
+                <span class="window-dish-price">₹145</span>
+              </div>
+              <h3 class="window-dish-title">Railway Kulhad Masala Chai</h3>
+              <p class="window-dish-desc">
+                Brewed with hand-crushed ginger, green cardamom, cinnamon, and whole cloves, poured piping hot into natural clay terracotta cups with butter cookies.
+              </p>
+            </div>
+            <div class="window-dish-footer">
+              <span class="berth-serving-tag">Platform Kettle • 2 Cups</span>
+              <a href="https://wa.me/917500045675?text=Hello%20The%20Royal%20Rail%20Cafe%2C%20I%20would%20like%20to%20order%3A%20Railway%20Kulhad%20Masala%20Chai%20(%E2%82%B9145)%20from%20the%20Carriage%20Menu." target="_blank" rel="noopener noreferrer" class="btn-order-dish btn-order-whatsapp" data-dish="Railway Kulhad Masala Chai" data-price="₹145" aria-label="Order Railway Kulhad Masala Chai on WhatsApp">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                <span>Order on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6. Decadent Sizzling Brownie -->
+        <article class="coach-window-item" data-category="desserts" data-dish="Locomotive Sizzler Brownie" data-price="₹345">
+          <div class="window-frame-trim"></div>
+          <div class="window-rivets-top">
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+            <span class="rivet-dot"></span>
+          </div>
+
+          <div class="window-glass-viewport">
+            <img src="assets/images/brownie.jpg" alt="Cast iron skillet sizzling chocolate fudge brownie with ice cream" class="window-dish-img" loading="lazy">
+            <div class="window-curtain-layer" aria-hidden="true">
+              <div class="curtain-panel left"></div>
+              <div class="curtain-panel right"></div>
+            </div>
+            <div class="window-glass-sheen"></div>
+          </div>
+
+          <div class="window-content-panel">
+            <div>
+              <div class="window-meta-row">
+                <span class="dish-dietary-badge">
+                  <span class="dietary-square veg"></span>
+                  <span>Hot Cast Iron</span>
+                </span>
+                <span class="window-dish-price">₹345</span>
+              </div>
+              <h3 class="window-dish-title">Locomotive Sizzler Brownie</h3>
+              <p class="window-dish-desc">
+                Dense Belgian chocolate walnut brownie served on a crackling sizzling plate, topped with Madagascar vanilla bean ice cream and hot chocolate lava drizzle.
+              </p>
+            </div>
+            <div class="window-dish-footer">
+              <span class="berth-serving-tag">Signature Dessert • Hot & Cold</span>
+              <a href="https://wa.me/917500045675?text=Hello%20The%20Royal%20Rail%20Cafe%2C%20I%20would%20like%20to%20order%3A%20Locomotive%20Sizzler%20Brownie%20(%E2%82%B9345)%20from%20the%20Carriage%20Menu." target="_blank" rel="noopener noreferrer" class="btn-order-dish btn-order-whatsapp" data-dish="Locomotive Sizzler Brownie" data-price="₹345" aria-label="Order Locomotive Sizzler Brownie on WhatsApp">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                <span>Order on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================================================
+       SECTION DIVIDER: Railway Coupling Knuckle
+       ========================================================================== -->
+  <div class="coupling-divider" aria-hidden="true">
+    <div class="coupling-line"></div>
+    <div class="coupling-knuckle">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="12" r="10"/>
+      </svg>
+      <span>OBSERVATION DECK • SCENERY GALLERY</span>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       GALLERY SECTION — Instagram Carriage Grid & Ambience
+       ========================================================================== -->
+  <section class="gallery-section" id="gallery">
+    <div class="container-wide">
+      <div class="section-header">
+        <div class="section-eyebrow">Visual Scenery</div>
+        <h2 class="section-title">Life on Platform 1</h2>
+        <p class="section-subtitle">
+          From twilight outdoor dining alongside real tracks to warm emerald booths inside the saloon.
+        </p>
+      </div>
+
+      <div class="gallery-grid">
+        <!-- 1. Exterior Twilight Patio (Wide 6-col) -->
+        <div class="gallery-card col-6">
+          <img src="assets/images/exterior.jpg" alt="Golden hour outdoor platform deck of The Royal Rail Cafe" loading="lazy">
+          <div class="gallery-overlay">
+            <h4 class="gallery-caption-title">The Platform Dining Deck</h4>
+            <span class="gallery-caption-sub">TWILIGHT PATIO & RESTORED RAILWAY AMBIANCE</span>
+          </div>
+        </div>
+
+        <!-- 2. Illuminated Night Coach Exterior (6-col) -->
+        <div class="gallery-card col-6">
+          <img src="assets/images/night_exterior.jpg" alt="Night lights glowing through the carriage windows" loading="lazy">
+          <div class="gallery-overlay">
+            <h4 class="gallery-caption-title">Starlight Express Ambience</h4>
+            <span class="gallery-caption-sub">AMBER LANTERNS & VINTAGE PLATFORM CLOCK</span>
+          </div>
+        </div>
+
+        <!-- 3. Coach Interior Booths (8-col) -->
+        <div class="gallery-card col-8">
+          <img src="assets/images/interior.jpg" alt="Emerald booths and brass lamps inside the coach" loading="lazy">
+          <div class="gallery-overlay">
+            <h4 class="gallery-caption-title">The Royal Saloon Dining Compartment</h4>
+            <span class="gallery-caption-sub">MAHOGANY WOODWORK & VINTAGE ROUTE MAPS</span>
+          </div>
+        </div>
+
+        <!-- 4. Craft Mocktails (4-col) -->
+        <div class="gallery-card col-4">
+          <img src="assets/images/mocktails.jpg" alt="Artisanal mocktails by the carriage window" loading="lazy">
+          <div class="gallery-overlay">
+            <h4 class="gallery-caption-title">Sunset Spritzers</h4>
+            <span class="gallery-caption-sub">CRAFT BEVERAGES AT WINDOW SIDE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION DIVIDER: Railway Coupling Knuckle
+       ========================================================================== -->
+  <div class="coupling-divider" aria-hidden="true">
+    <div class="coupling-line"></div>
+    <div class="coupling-knuckle">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="12" r="10"/>
+      </svg>
+      <span>CENTRAL BOOKING COUNTER • PNR ALLOTMENT</span>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       RESERVATIONS SECTION — Vintage Train Ticket Booking Slip
+       ========================================================================== -->
+  <section class="reservation-section" id="reservations">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-eyebrow">Ticket Counter</div>
+        <h2 class="section-title">Book Your Coach Berth</h2>
+        <p class="section-subtitle">
+          Reserve your dining compartment in advance. Fill the journey manifest below to receive your confirmed vintage boarding pass.
+        </p>
+      </div>
+
+      <div class="reservation-wrapper">
+        <div class="ticket-envelope-sleeve">
+          <div class="ticket-container">
+            <div class="ticket-watermark-pattern"></div>
+
+            <!-- Red-Ink Stamped "CONFIRMED" Seal -->
+            <div class="ticket-stamp-seal" id="ticketStampSeal">
+              CONFIRMED<br>BERTH ALLOTTED
+            </div>
+
+            <!-- Ticket Header Strip -->
+            <div class="ticket-header-strip">
+              <span class="ticket-train-no">RRC-EXPRESS 2026</span>
+              <span class="ticket-header-title">THE ROYAL RAIL CAFE</span>
+              <span class="ticket-class-badge" id="ticketPnrDisplay">PNR: RRC-7842918</span>
+            </div>
+
+            <!-- Route Summary Row -->
+            <div class="ticket-route-row">
+              <div class="route-station">
+                <span class="route-code">DAILY LIFE</span>
+                <span class="route-city">DEPARTURE PLATFORM</span>
+              </div>
+              <div class="route-connector">
+                <span class="route-train-tag">NON-STOP LUXURY JOURNEY</span>
+                <div class="route-line"></div>
+                <span class="route-train-tag">THE ROYAL RAIL CAFE JUNCTION</span>
+              </div>
+              <div class="route-station" style="text-align: right;">
+                <span class="route-code">GASTRONOMY</span>
+                <span class="route-city">DELICIOUS PARADISE</span>
+              </div>
+            </div>
+
+            <!-- Ticket Barcode Strip -->
+            <div class="ticket-barcode-strip">
+              <div class="barcode-lines"></div>
+              <span class="barcode-pnr-text">ROYAL-RAIL-CAFE-PASS-2026</span>
+              <div class="barcode-lines"></div>
+            </div>
+
+            <!-- Booking Form Body -->
+            <form class="ticket-form-body" id="ticketBookingForm">
+              <div class="ticket-form-grid">
+
+                <!-- Passenger Name -->
+                <div class="ticket-input-group">
+                  <label for="passengerName" class="ticket-label">
+                    <span>Passenger Full Name</span>
+                    <span style="color:var(--rail-maroon);">*</span>
+                  </label>
+                  <input type="text" id="passengerName" class="ticket-input" placeholder="e.g. Vikramaditya Sharma" required>
+                </div>
+
+                <!-- Contact Number -->
+                <div class="ticket-input-group">
+                  <label for="contactNumber" class="ticket-label">
+                    <span>Mobile / WhatsApp</span>
+                    <span style="color:var(--rail-maroon);">*</span>
+                  </label>
+                  <input type="tel" id="contactNumber" class="ticket-input" placeholder="+91 75000 45675" required>
+                </div>
+
+                <!-- Journey Date -->
+                <div class="ticket-input-group">
+                  <label for="journeyDate" class="ticket-label">
+                    <span>Journey Date</span>
+                    <span style="color:var(--rail-maroon);">*</span>
+                  </label>
+                  <input type="date" id="journeyDate" class="ticket-input" required>
+                </div>
+
+                <!-- Journey Slot / Dining Time -->
+                <div class="ticket-input-group">
+                  <label for="journeyTime" class="ticket-label">
+                    <span>Dining Service Slot</span>
+                    <span style="color:var(--rail-maroon);">*</span>
+                  </label>
+                  <select id="journeyTime" class="ticket-select" required>
+                    <option value="Sunset Dinner (07:30 PM)">Sunset Dinner (07:30 PM)</option>
+                    <option value="High Chai Express (04:30 PM)">High Chai Express (04:30 PM)</option>
+                    <option value="Starlight Supper (09:30 PM)">Starlight Supper (09:30 PM)</option>
+                    <option value="Grand Lunch Express (01:00 PM)">Grand Lunch Express (01:00 PM)</option>
+                  </select>
+                </div>
+
+                <!-- Number of Passengers -->
+                <div class="ticket-input-group">
+                  <label for="passengerCount" class="ticket-label">
+                    <span>Seat Count (Berths)</span>
+                    <span style="color:var(--rail-maroon);">*</span>
+                  </label>
+                  <select id="passengerCount" class="ticket-select" required>
+                    <option value="2">2 Berths (Couples Window Table)</option>
+                    <option value="4" selected>4 Berths (Heritage Booth)</option>
+                    <option value="6">6 Berths (Family Cabin)</option>
+                    <option value="10">10+ Berths (Full Compartment)</option>
+                  </select>
+                </div>
+
+                <!-- Dietary Preference -->
+                <div class="ticket-input-group">
+                  <label for="dietPreference" class="ticket-label">
+                    <span>Dietary Preference</span>
+                  </label>
+                  <select id="dietPreference" class="ticket-select">
+                    <option value="All Cuisines">All Cuisines Welcome</option>
+                    <option value="Pure Vegetarian">Pure Vegetarian</option>
+                    <option value="Jain Preparation">Jain Preparation Available</option>
+                    <option value="Special Celebration">Anniversary / Birthday Decor</option>
+                  </select>
+                </div>
+
+                <!-- Dining Saloon Preference Radio Buttons -->
+                <div class="coach-selector-grid">
+                  <label class="coach-radio-card">
+                    <input type="radio" name="coachSelection" value="coach-a" checked>
+                    <div class="coach-radio-box">
+                      <div class="coach-radio-bullet"></div>
+                      <div>
+                        <strong style="color:var(--rail-maroon);">The Royal Saloon (Berth A)</strong>
+                        <div style="font-size:0.8rem; color:var(--rail-iron);">Maharaja luxury, vintage lamps & intimate velvet booths.</div>
+                      </div>
+                    </div>
+                  </label>
+
+                  <label class="coach-radio-card">
+                    <input type="radio" name="coachSelection" value="coach-b">
+                    <div class="coach-radio-box">
+                      <div class="coach-radio-bullet"></div>
+                      <div>
+                        <strong style="color:var(--rail-green);">The Heritage Diner (Berth B)</strong>
+                        <div style="font-size:0.8rem; color:var(--rail-iron);">Panoramic picture windows, art-deco styling & open tea bar.</div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+              </div>
+
+              <!-- Ticket Footer Row with Fare & Submit Stamp Button -->
+              <div class="ticket-footer-row">
+                <div class="ticket-fare-info">
+                  <span class="fare-title">Table Reservation Fee</span>
+                  <span class="fare-amount">ZERO ADVANCE • PAY AT SEAT</span>
+                </div>
+                <button type="submit" class="btn-book-ticket" id="submitTicketBtn">
+                  <span>CONFIRM RESERVATION 🎟️</span>
+                </button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SECTION DIVIDER: Railway Coupling Knuckle
+       ========================================================================== -->
+  <div class="coupling-divider" aria-hidden="true">
+    <div class="coupling-line"></div>
+    <div class="coupling-knuckle">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="12" r="10"/>
+      </svg>
+      <span>STATION TIMETABLE • DEPARTURE SCHEDULE</span>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       LOCATION & TIMETABLE — Split-Flap Departure Board
+       ========================================================================== -->
+  <section class="station-board-section" id="timetable">
+    <div class="container">
+      <div class="station-board-container">
+        <!-- Departure Board Header -->
+        <div class="board-header-row">
+          <div>
+            <span class="board-junction-title">THE ROYAL RAIL CAFE JUNCTION — TIMETABLE</span>
+            <div style="font-size: 0.78rem; color: var(--rail-steel); margin-top: 4px;">ALL SERVICES RUNNING ON SCHEDULE 7 DAYS A WEEK</div>
+          </div>
+          <div class="board-status-live">
+            <span class="signal-lamp-blink"></span>
+            <span>ALL TRACKS OPEN</span>
+          </div>
+        </div>
+
+        <!-- Split-Flap Schedule Table with Touch Horizontal Scroll -->
+        <div class="table-responsive-wrapper">
+          <div class="table-scroll-hint" aria-hidden="true">
+            <span>⇄ Swipe schedule horizontally to view all services</span>
+          </div>
+          <table class="board-timetable-table">
+            <thead>
+              <tr>
+                <th>SERVICE NAME</th>
+                <th>DEPARTURE</th>
+                <th>SALOON</th>
+                <th>SPECIALTY MENU</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="board-row">
+                <td><span class="flap-cell">BRUNCH EXP</span></td>
+                <td><span class="flap-cell">11:30 AM</span></td>
+                <td><span class="platform-num-badge">SALOON A & B</span></td>
+                <td>Artisanal Dim Sum, Parathas & Fresh Roasts</td>
+                <td class="status-cell-ontime">ON TIME</td>
+              </tr>
+              <tr class="board-row">
+                <td><span class="flap-cell">GRAND LUNCH</span></td>
+                <td><span class="flap-cell">01:00 PM</span></td>
+                <td><span class="platform-num-badge">ROYAL SALOON</span></td>
+                <td>Awadhi Dum Biryani & Frontier Curries</td>
+                <td class="status-cell-ontime">ON TIME</td>
+              </tr>
+              <tr class="board-row">
+                <td><span class="flap-cell">HIGH CHAI</span></td>
+                <td><span class="flap-cell">04:30 PM</span></td>
+                <td><span class="platform-num-badge">HERITAGE DINER</span></td>
+                <td>Steaming Kulhad Masala Chai & Samosas</td>
+                <td class="status-cell-ontime">ON TIME</td>
+              </tr>
+              <tr class="board-row">
+                <td><span class="flap-cell">SUNSET DINNER</span></td>
+                <td><span class="flap-cell">07:30 PM</span></td>
+                <td><span class="platform-num-badge">PLATFORM DECK</span></td>
+                <td>Sizzling Woks, Mocktails & Tandoor Grills</td>
+                <td class="status-cell-ontime">ON TIME</td>
+              </tr>
+              <tr class="board-row">
+                <td><span class="flap-cell">STARLIGHT SUP</span></td>
+                <td><span class="flap-cell">09:30 PM</span></td>
+                <td><span class="platform-num-badge">ALL SALOONS</span></td>
+                <td>Sizzler Brownies, Mughlai Delicacies</td>
+                <td class="status-cell-ontime">ON TIME</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Junction Guide Footnote -->
+        <div style="margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-family: var(--font-mono); font-size: 0.82rem;">
+          <div>📍 Station Junction: Bareilly, Uttar Pradesh 243001, India</div>
+          <div>📞 WhatsApp & Order Hotline: <a href="https://wa.me/917500045675" target="_blank" rel="noopener" style="color:var(--rail-gold); font-weight:bold; text-decoration:none;">07500045675 / +91 75000 45675</a></div>
+          <div>🅿️ Dedicated Parking on Station Yard</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       LOCATION SECTION — Platform Station Depot & Google Maps
+       ========================================================================== -->
+  <section class="location-section" id="location">
+    <div class="container">
+      <div class="section-header-centered">
+        <span class="section-kicker">STATION JUNCTION & PLATFORM MAP</span>
+        <h2 class="section-title">VISIT THE ROYAL RAIL CAFE</h2>
+        <div class="brass-rule-ornament"></div>
+        <p class="section-subtitle">
+          Located at Bareilly Junction, Uttar Pradesh. Step aboard our authentic dining carriages or order delicious delicacies directly on WhatsApp.
+        </p>
+      </div>
+
+      <div class="location-grid">
+        <!-- Station Information Card -->
+        <div class="location-info-card">
+          <div>
+            <span class="location-station-badge">
+              <span>🚂</span>
+              <span>BAREILLY JN. • PLATFORM YARD</span>
+            </span>
+            <h3 class="location-card-title">The Royal Rail Cafe</h3>
+            <p class="location-card-desc">
+              Experience grand heritage dining inside authentic restored railway carriages. Savor sizzling woks, Awadhi dum biryani, piping hot kulhad chai, and tandoori feasts with rhythmic train nostalgia.
+            </p>
+
+            <div class="location-details-list">
+              <div class="location-detail-item">
+                <div class="location-detail-icon">📍</div>
+                <div class="location-detail-text">
+                  <strong>Station Address</strong>
+                  <span>The Royal Rail Cafe, Bareilly, Uttar Pradesh 243001, India</span>
+                </div>
+              </div>
+
+              <div class="location-detail-item">
+                <div class="location-detail-icon">📱</div>
+                <div class="location-detail-text">
+                  <strong>Order on WhatsApp & Phone Hotline</strong>
+                  <span><a href="https://wa.me/917500045675" target="_blank" rel="noopener" style="color:var(--rail-maroon); font-weight:bold; text-decoration:none;">07500045675</a> / +91 75000 45675</span>
+                </div>
+              </div>
+
+              <div class="location-detail-item">
+                <div class="location-detail-icon">⏰</div>
+                <div class="location-detail-text">
+                  <strong>Platform Operating Hours</strong>
+                  <span>Monday to Sunday: 11:00 AM – 11:30 PM (All Saloons Active)</span>
+                </div>
+              </div>
+
+              <div class="location-detail-item">
+                <div class="location-detail-icon">🅿️</div>
+                <div class="location-detail-text">
+                  <strong>Station Yard Amenities</strong>
+                  <span>Dedicated Car Parking • Air-Conditioned Vintage Saloons • Private Party Charters</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="location-actions-group">
+            <a href="https://www.google.com/maps?vet=10CAAQoqAOahcKEwiArP62gumWAxUAAAAAHQAAAAAQHw..i&fvr=1&pvq=Cg0vZy8xMXhnaGp0OXYwIg8KCXJhaWwgY2FmZRACGAM&lqi=CglyYWlsIGNhZmVIwM6y-Lm8gIAIWhMQABABGAAYASIJcmFpbCBjYWZlkgEEY2FmZQ&cs=0&um=1&ie=UTF-8&fb=1&gl=in&sa=X&ftid=0x39a001000f10aad9:0x1bb19dfc3118764d" target="_blank" rel="noopener noreferrer" class="btn-directions-maps" id="btnGoogleMapsDirections">
+              <span>🗺️ Open in Google Maps</span>
+              <span>↗</span>
+            </a>
+            <a href="https://wa.me/917500045675?text=Hello%20The%20Royal%20Rail%20Cafe%2C%20I%20would%20like%20to%20place%20an%20order." target="_blank" rel="noopener noreferrer" class="btn-whatsapp-hotline" id="btnLocationWhatsApp">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+              <span>Order on WhatsApp</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Interactive Google Map Viewport -->
+        <div class="location-map-container">
+          <div class="map-brass-header">
+            <span>📍 LIVE STATION MAP & TRANSIT</span>
+            <span>BAREILLY JN. (BLY)</span>
+          </div>
+          <div class="map-frame-viewport">
+            <iframe
+              title="The Royal Rail Cafe Google Maps Location"
+              src="https://maps.google.com/maps?q=28.4110661,79.4329088&hl=en&z=16&output=embed"
+              loading="lazy"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SITE FOOTER — Platform 1 Signboard & Heritage Seal
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <!-- Classic Dual-Language Indian Railways Platform Enamel Signboard -->
+      <div class="platform-signboard-wrapper">
+        <div class="platform-enamel-sign">
+          <div class="sign-hindi">द रॉयल रेल कैफे</div>
+          <div class="sign-english">THE ROYAL RAIL CAFE</div>
+          <div class="sign-elevation">ELEVATION: 540M • PLATFORM NO. 1</div>
+        </div>
+      </div>
+
+      <!-- Footer Columns -->
+      <div class="footer-grid">
+        <div class="footer-col-brand">
+          <span class="logo-title" style="color:var(--rail-maroon);">THE ROYAL RAIL CAFE</span>
+          <p class="footer-desc">
+            India’s grandest royal railway dining experience. Recreating the warmth, rhythm, and romance of vintage train travel with exquisite Indian and Asian culinary craft.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Compartments</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#reservations" class="footer-nav-link">The Royal Saloon (Berth A)</a></li>
+            <li><a href="#reservations" class="footer-nav-link">The Heritage Diner (Berth B)</a></li>
+            <li><a href="#gallery" class="footer-nav-link">Outdoor Platform Deck</a></li>
+            <li><a href="#menu" class="footer-nav-link">Pantry Car Kitchen</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Cuisine Express</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#menu" class="footer-nav-link">Awadhi Dum Biryani</a></li>
+            <li><a href="#menu" class="footer-nav-link">Kulhad Masala Chai</a></li>
+            <li><a href="#menu" class="footer-nav-link">Sizzling Wok Noodles</a></li>
+            <li><a href="#menu" class="footer-nav-link">Frontier Tandoor Feast</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Station Master</h4>
+          <ul class="footer-nav-list">
+            <li><a href="#location" class="footer-nav-link">📍 Station Location (Bareilly)</a></li>
+            <li><a href="https://wa.me/917500045675?text=Hello%20The%20Royal%20Rail%20Cafe%2C%20I%20would%20like%20to%20place%20an%20order." target="_blank" rel="noopener" class="footer-nav-link">💬 WhatsApp Order: 07500045675</a></li>
+            <li><a href="#reservations" class="footer-nav-link">PNR Ticket Booking</a></li>
+            <li><a href="#timetable" class="footer-nav-link">Operating Hours</a></li>
+            <li><a href="https://instagram.com" target="_blank" rel="noopener" class="footer-nav-link">Instagram: @theroyalrailcafe.in</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer Copyright -->
+      <div class="footer-copyright">
+        <p>© 2026 THE ROYAL RAIL CAFE. ALL RIGHTS RESERVED. CRAFTED WITH NOSTALGIA & PASSION FOR INDIAN RAILWAYS.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       CONFIRMED BOARDING PASS MODAL
+       ========================================================================== -->
+  <div class="ticket-modal-backdrop" id="ticketModalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="ticket-modal-dialog">
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Ticket Modal">✕</button>
+
+      <div class="modal-ticket-inner">
+        <div class="modal-success-banner">
+          <span class="success-whistle-icon">🚂</span>
+          <h3 class="modal-success-title" id="modalTitle">ALL ABOARD! ROYAL BERTH CONFIRMED</h3>
+          <p class="modal-success-sub">Your table permit has been officially stamped into our passenger manifest.</p>
+        </div>
+
+        <!-- Boarding Pass Details -->
+        <div class="boarding-pass-grid">
+          <div class="pass-field">
+            <span class="pass-field-lbl">PNR NUMBER</span>
+            <span class="pass-field-val pnr" id="modalPnrVal">RRC-7842918</span>
+          </div>
+          <div class="pass-field">
+            <span class="pass-field-lbl">PASSENGER NAME</span>
+            <span class="pass-field-val" id="modalNameVal">HONORED GUEST</span>
+          </div>
+          <div class="pass-field">
+            <span class="pass-field-lbl">DATE & SERVICE</span>
+            <span class="pass-field-val" id="modalDateVal">TODAY • SUNSET DINNER</span>
+          </div>
+          <div class="pass-field">
+            <span class="pass-field-lbl">ASSIGNED SALOON</span>
+            <span class="pass-field-val coach" id="modalCoachVal">THE ROYAL SALOON</span>
+          </div>
+          <div class="pass-field">
+            <span class="pass-field-lbl">TABLE / BERTH</span>
+            <span class="pass-field-val" id="modalBerthVal">BERTH 07 (WINDOW SIDE)</span>
+          </div>
+          <div class="pass-field">
+            <span class="pass-field-lbl">PARTY SIZE</span>
+            <span class="pass-field-val" id="modalGuestsVal">4 GUESTS</span>
+          </div>
+        </div>
+
+        <!-- Modal Actions -->
+        <div class="modal-actions-row">
+          <button class="btn-print-ticket" id="modalPrintBtn">
+            <span>🖨️ Print Boarding Pass</span>
+          </button>
+          <button class="btn-dismiss-ticket" id="modalDismissBtn">
+            <span>Close Permitting Slip</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating WhatsApp Quick Order Button -->
+  <a href="https://wa.me/917500045675?text=Hello%20The%20Royal%20Rail%20Cafe%2C%20I%20would%20like%20to%20place%20an%20order." target="_blank" rel="noopener noreferrer" class="floating-whatsapp-btn" aria-label="Order on WhatsApp (07500045675)" id="floatingWhatsAppBtn">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+    <span class="wa-label-long">Order on WhatsApp</span>
+    <span class="wa-label-short">Order</span>
+  </a>
+
+  <!-- Scripts -->
+  <script src="js/audio-synth.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/train-controller.js"></script>
+  <script src="js/parallax.js"></script>
+  <script src="js/reservation.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
